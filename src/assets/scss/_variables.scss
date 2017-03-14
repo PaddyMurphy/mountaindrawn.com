@@ -1,0 +1,40 @@
+$background-opacity: 0.08;
+$header-height: 70px;
+$default-padding: 20px;
+$photo-width: 150px;
+$detail-photo-width: 60px;
+$photo-column-width: ($photo-width * 2) + $default-padding;
+
+$mountains-width: 500px;
+$mountains-height: 300px;
+$earth-blue: #B3DEF1;
+$earth-mountain: #744690;
+$link-dark: #177fad;
+
+$data-width: 25vw;
+
+$number-rocks: 30;
+$transition-speed: 1.3s;
+// http://easings.net/#easeInOutCirc
+$rock-easing: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+
+// media queries
+@mixin mquery($size) {
+	@if $size == xsmall {
+		@media (min-width: 320px) {
+			@content;
+		}
+	}
+
+	@if $size == small {
+		@media (min-width: 500px) {
+		 	@content;
+		}
+	}
+
+	@else if $size == medium {
+		@media (min-width: 1000px) {
+		 	@content;
+		}
+	}
+}

@@ -1,0 +1,34 @@
+<svg width="100%" height="100%" viewBox="0 0 500 300" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="tetons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <polygon id="shard-1" fill="#666A2F" points="251.46875 154.49707 254.863281 283.996094 187.152344 227.171875"></polygon>
+        <polygon id="shard-2" fill="#9EB275" points="250.894531 156.652344 254.597656 282.890625 316.988281 241.362305"></polygon>
+        <polygon id="shard-3" fill="#7CA3E7" points="55.7070312 231.550781 183.207031 245.367188 208.398437 280.480469"></polygon>
+        <polygon id="shard-4" fill="#353E0D" points="250.556641 156.859375 242.648438 106.982422 187.589844 226.917969"></polygon>
+        <polygon id="shard-5" fill="#666A2F" points="243.023438 108.447266 186.378906 131.429688 187.34375 228.259766"></polygon>
+        <polygon id="shard-6" fill="#9EB275" points="186.775391 131.541016 166.884766 137.246094 187.386719 227.908203"></polygon>
+        <polygon id="shard-7" fill="#353D0C" points="187.832031 227.630859 112.634766 191.236328 167.605469 137.728516"></polygon>
+        <polygon id="shard-8" fill="#9EB275" points="113.375 190.384766 63.3476562 200.775391 188.109375 227.464844"></polygon>
+        <polygon id="shard-9" fill="#353E0D" points="186.660156 131.375 267.824219 100.890625 211.839844 85"></polygon>
+        <polygon id="shard-10" fill="#9EB275" points="266.253906 100.442383 231.796875 76.125 212.386719 85.2753906"></polygon>
+        <polygon id="shard-11" fill="#666A2F" points="231.970703 76.2441406 266.355469 100.748047 255.363281 49.4345703"></polygon>
+        <polygon id="shard-12" fill="#9EB275" points="255.060547 50.25 327.478516 55.1953125 265.929688 100.62793"></polygon>
+        <polygon id="shard-13" fill="#DBEBB8" points="254.726562 50.34375 293.658203 25.265625 326.626953 55.0292969"></polygon>
+        <polygon id="shard-14" fill="#9EB275" points="293.72168 25.8007812 316.632812 18 320.745117 49.8603516"></polygon>
+        <polygon id="shard-15" fill="#DBEBB8" points="327.535156 55.1425781 263.84668 102.044922 327.535156 83.3564453"></polygon>
+        <polygon id="shard-16" fill="#DBEBB8" points="327.480469 82.0722656 339.423828 90.6357422 306.171875 176.925781"></polygon>
+        <polygon id="shard-17" fill="#9EB275" points="327.794922 81.7207031 306.662109 176.470703 250.580078 156.769531"></polygon>
+        <polygon id="shard-18" fill="#666A2F" points="328.259766 82.0175781 250.320312 157.640625 242.728516 108.541016"></polygon>
+        <polygon id="shard-19" fill="#9EB275" points="338.90625 90.6484375 366.929687 117.060547 305.579102 177.453125"></polygon>
+        <polygon id="shard-20" fill="#DBEBB8" points="305.287109 176.882812 367.464844 116.142578 381.132812 161.824219"></polygon>
+        <polygon id="shard-21" fill="#9EB275" points="304.625 176.619141 381.189453 161.373047 416.046875 249.572266"></polygon>
+        <polygon id="shard-22" fill="#666A2F" points="306.085938 177.560547 316.216797 241.292969 414.880859 248.089844"></polygon>
+        <polygon id="shard-23" fill="#353E0D" points="250.654297 156.542969 316.432617 241.750977 305.955078 176.208984"></polygon>
+        <polygon id="shard-24" fill="#353E0D" points="94.6640625 200 88 222.1875 103.554688 222.445312"></polygon>
+        <polygon id="shard-25" fill="#666A2F" points="87.6640625 206 81 228.1875 96.5546875 228.445312"></polygon>
+        <polygon id="shard-26" fill="#666A2F" points="206.925781 262 201 290.173828 216.613281 291.878906"></polygon>
+        <polygon id="shard-27" fill="#353E0D" points="171.86983 219.890625 166.884766 242.335938 181.056641 241.173919"></polygon>
+        <polygon id="shard-28" fill="#98BAF4" points="56.0654297 231.467773 95.5253906 292.439453 196.347656 276.131836"></polygon>
+        <polygon id="shard-29" fill="#AE704A" points="108.864258 271.671711 127.612061 266.466309 129.001952 271.671711"></polygon>
+        <polygon id="shard-30" fill="#8B644C" points="108.698812 271.757474 104 268.5 106.64475 275.971924"></polygon>
+    </g>
+</svg>
