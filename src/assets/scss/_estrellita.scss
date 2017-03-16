@@ -33,7 +33,7 @@ body[data-mountain="estrellita"] {
 			transform: translate(-11vw, 3vh);
 		}
 	}
-	// TODO: add noise background-image: url('../images/img-noise.png');
+	// TODO: add noise background-image: url('../assets/images/img-noise.png');
 	// tiles read left to right and back
 	.mountains > .rock {
 		&:nth-child(1) {

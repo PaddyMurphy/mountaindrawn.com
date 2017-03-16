@@ -1,5 +1,5 @@
 <template>
-  <div class="mountaindrawn">
+  <div class="mountaindrawn" v-bind:class="{ supportsClipPath }">
     <svg style="display: none;">
       <symbol viewBox="0 0 56 49" version="1.1">
         <g id="arrow-left" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -15,7 +15,7 @@
       <h1 class="title"></h1>
 
       <div class="title-nav">
-        <a href="#" class="nav-arrow nav-left">
+        <a href="#" class="nav-arrow nav-left" v-on:click="navigateLeft">
           <svg class="arrow-left" viewBox="0 0 56 49">
             <use xlink:href="#arrow-left" />
           </svg>
@@ -23,7 +23,7 @@
 
         <a href="#" class="nav-earth"></a>
 
-        <a href="#" class="nav-arrow nav-right">
+        <a href="#" class="nav-arrow nav-right" v-on:click="navigateRight">
           <svg class="arrow-right" viewBox="0 0 56 49">
             <use xlink:href="#arrow-left" />
           </svg>
@@ -50,7 +50,13 @@
 
         <div class="data transparent">
           <span class="data-close"></span>
-          <div class="data-content"></div>
+          <div class="data-content">
+            <h2 class="data-title">{{ title }}</h2>
+            <p class="data-elevation">elevation
+              <b>{{ elevation }}</b></p>
+            <p class="data-prominence">prominence {{ prominence }}</p>
+            <p class="data-description">{{ description }}</p>
+          </div>
           <div class="data-photos"></div>
         </div>
       </div><!-- END .mountains-wrapper -->
@@ -118,27 +124,60 @@ export default {
   name: 'mountain',
   data () {
     return {
+      currentMountain: 0,
+      description: '',
+      elevation: '',
+      prominence: '',
+      title: '',
       earthStarted: false,
       mountains: mountaindata.mountains,
-      length: mountaindata.mountains.length,
+      length: mountaindata.mountains.length - 1,
       mountainHeight: 500,
-      mountainWidth: 500
+      mountainWidth: 500,
+      supportsClipPath: 'no-clip-path'
     }
   },
   mounted: function () {
     this.sizeshards();
+    this.setEvents();
     // init earth sequence
     if (document.body.dataset.mountain === 'earth') {
       this.earthSequence();
     }
     // test for clip-path support
-    // if (areClipPathShapesSupported()) {
-    //   document.body.classList.remove('no-clip-path');
-    //   document.body.classList.add('supports-clip-path');
-    //   // setMtnClickEvents();
-    // }
+    if (this.areClipPathShapesSupported()) {
+      this.supportsClipPath = 'supports-clip-path';
+      // TODO: setMtnClickEvents();
+    }
+  },
+  beforeDestroy: function () {
+    window.removeEventListener('resize', this.sizeshards);
+  },
+  watch: {
+    currentMountain: 'navigate'
   },
   methods: {
+    setEvents: function () {
+      window.addEventListener('resize', this.sizeshards);
+    },
+    navigateRight: function () {
+      // start at beginning again if at end
+      this.currentMountain = (this.currentMountain === this.length) ? 0 : (this.currentMountain + 1);
+    },
+    navigateLeft: function () {
+      // start at end again if at beginning
+      this.currentMountain = (this.currentMountain === 0) ? this.length : (this.currentMountain - 1);
+    },
+    navigate: function () {
+      // navigate accepts position in array
+      // @requires mewMountain (number)
+      var mountainId = this.mountains[this.currentMountain].id;
+      // get id and set to body dataset
+      document.body.dataset.mountain = mountainId;
+      // setData(mountain);
+      // Router.navigate('#/' + mountain);
+      // getMountainImages(mountain);
+    },
     sizeshards: function () {
       // NOTE: maintain aspect ration of 5:3
       // calc height & width
@@ -199,6 +238,38 @@ export default {
       }());
 
       this.earthStarted = true;
+    },
+    // test for clip-path support
+    // from http://codepen.io/anon/pen/YXyyMJ
+    // in this thread http://stackoverflow.com/questions/27558996/how-can-i-test-for-clip-path-support
+    // TODO: import this from separate file
+    areClipPathShapesSupported: function () {
+      var base = 'clipPath';
+      var prefixes = [ 'webkit', 'moz', 'ms', 'o' ];
+      var properties = [ base ];
+      var testElement = document.createElement('testelement');
+      var attribute = 'polygon(50% 0%, 0% 100%, 100% 100%)';
+
+      // Push the prefixed properties into the array of properties.
+      for (var i = 0, l = prefixes.length; i < l; i++) {
+        var prefixedProperty = prefixes[i] + base.charAt(0).toUpperCase() + base.slice(1); // remember to capitalize!
+        properties.push(prefixedProperty);
+      }
+      // Interate over the properties and see if they pass two tests.
+      for (var i = 0, l = properties.length; i < l; i++) { // eslint-disable-line
+        var property = properties[i];
+
+        // First, they need to even support clip-path (IE <= 11 does not)...
+        if (testElement.style[property] === '') {
+          // Second, we need to see what happens when we try to create a CSS shape...
+          testElement.style[property] = attribute;
+          if (testElement.style[property] !== '') {
+            return true;
+          }
+        }
+      }
+
+      return false;
     }
   }
 }
@@ -214,6 +285,10 @@ export default {
 @import '../assets/scss/_variables.scss';
 @import '../assets/scss/_utilities.scss';
 @import '../assets/scss/_earth.scss';
+@import '../assets/scss/_bugaboo.scss';
+@import '../assets/scss/_blanca-traverse.scss';
+@import '../assets/scss/_glacier-peak.scss';
+@import '../assets/scss/_tetons.scss';
 
 h1 {
   color: $link-dark;
