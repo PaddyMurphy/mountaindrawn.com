@@ -30,12 +30,6 @@ html {
     visibility: visible;
 }
 
-.transparent {
-    // disable click events on hidden elements
-    pointer-events: none;
-    opacity: 0;
-}
-
 .opaque {
     opacity: 1;
 }

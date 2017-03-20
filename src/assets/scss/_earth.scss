@@ -536,16 +536,16 @@ body[data-mountain="earth"] {
 		top: 0;
 		left: 0;
 		width: 200px;
-		// do not transition visibility
-		transition: opacity 0.8s, transform 0.8s;
-		transform: rotate(45deg) translate(0);
-		visibility: hidden;
+    // do not transition visibility
+    transition: opacity 0.8s, transform 0.8s;
+    transform: rotate(45deg) translate(0);
+    visibility: hidden;
 
-		&.animate {
-			opacity: 0;
-			transform: rotate(45deg) translate(50vw);
-			visibility: visible;
-		}
+    &.animate {
+      opacity: 0;
+      transform: rotate(45deg) translate(50vw);
+      visibility: visible;
+    }
 	}
 
 	// SATELLITES

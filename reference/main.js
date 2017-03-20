@@ -21,13 +21,13 @@ $(function() {
     newMountain;
 
   // events
-  navLeft.addEventListener('click', navigateLeft, false);
-  navRight.addEventListener('click', navigateRight, false);
+  // DONE: navLeft.addEventListener('click', navigateLeft, false);
+  // DONE: navRight.addEventListener('click', navigateRight, false);
   navEarth.addEventListener('click', navigateEarth, false);
   dataClose.addEventListener('click', closeDateBox, false);
   data.addEventListener('click', viewMountain, false);
   shootingStar.addEventListener('transitionend', shootingStarEnd, false);
-  window.addEventListener('resize', sizeshards, false);
+  // DONE: window.addEventListener('resize', sizeshards, false);
 
   // keyboard navigation
   document.onkeydown = checkKey;
@@ -120,8 +120,8 @@ $(function() {
 
   function setData (newMountain) {
     // @requires mewMountain (string)
-    var newMountainData = mountainData[newMountain],
-      template = '<h2 class="data-title"><%this.title%></h2>' +
+    var newMountainData = mountainData[newMountain];
+    var template = '<h2 class="data-title"><%this.title%></h2>' +
       '<p class="data-elevation">elevation <b><%this.elevation%></b></p>' +
       '<p class="data-prominence">prominence <%this.prominence%></p>' +
       '<p class="data-description"><%this.description%></p>';
@@ -183,7 +183,7 @@ $(function() {
     shootingStar.style.left = getRandomInRange(-20, 70) + 'vw';
     shootingStar.style.width = getRandomInRange(10, 35) + 'vw';
     // start animation
-    shootingStar.classList.add('animate');
+    // shootingStar.classList.add('animate');
   }
 
   function shootingStarEnd() {

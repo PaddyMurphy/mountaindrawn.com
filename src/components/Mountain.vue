@@ -48,7 +48,7 @@
             <div class="static-mountain"></div>
         </div>
 
-        <div class="data transparent">
+        <div class="data" v-if="title">
           <span class="data-close"></span>
           <div class="data-content">
             <h2 class="data-title">{{ title }}</h2>
@@ -112,7 +112,12 @@
       <div class="starfield starfield-1"></div>
       <div class="starfield starfield-2"></div>
       <div class="starfield starfield-3"></div>
-      <div class="shooting-star"></div>
+      <transition name="animate">
+        <div class="shooting-star"
+          v-bind:class="{ animate: showShootingStar }"
+          v-bind:style="{ top: starTop, left: starLeft, width: starWidth }"
+        ></div>
+      </transition>
     </div>
   </div>
 </template>
@@ -134,7 +139,11 @@ export default {
       length: mountaindata.mountains.length - 1,
       mountainHeight: 500,
       mountainWidth: 500,
-      supportsClipPath: 'no-clip-path'
+      showShootingStar: false,
+      supportsClipPath: 'no-clip-path',
+      starTop: null,
+      starLeft: null,
+      starWidth: null
     }
   },
   mounted: function () {
@@ -159,6 +168,8 @@ export default {
   methods: {
     setEvents: function () {
       window.addEventListener('resize', this.sizeshards);
+      // TODO: does vue handle transitionend event?
+      window.addEventListener('transitionend', this.shootingStarEnd, false);
     },
     navigateRight: function () {
       // start at beginning again if at end
@@ -174,9 +185,19 @@ export default {
       var mountainId = this.mountains[this.currentMountain].id;
       // get id and set to body dataset
       document.body.dataset.mountain = mountainId;
-      // setData(mountain);
+      this.setData();
+      // TODO
       // Router.navigate('#/' + mountain);
       // getMountainImages(mountain);
+    },
+    setData: function () {
+      // set title, description, elevation, & prominence
+      var mountain = this.mountains[this.currentMountain];
+
+      this.title = mountain.title;
+      this.description = mountain.description;
+      this.elevation = mountain.elevation;
+      this.prominence = mountain.prominence;
     },
     sizeshards: function () {
       // NOTE: maintain aspect ration of 5:3
@@ -204,19 +225,16 @@ export default {
       return Math.round((Math.random() * (max - min) + min));
     },
     animateShootingStar: function () {
-      var shootingStar = document.querySelector('.shooting-star');
       // keep at top half of screen
       // set new top, left, and width
-      shootingStar.style.top = this.getRandomInRange(-10, 30) + 'vh';
-      shootingStar.style.left = this.getRandomInRange(-20, 70) + 'vw';
-      shootingStar.style.width = this.getRandomInRange(10, 35) + 'vw';
+      this.starTop = this.getRandomInRange(-10, 30) + 'vh';
+      this.starLeft = this.getRandomInRange(-20, 70) + 'vw';
+      this.starWidth = this.getRandomInRange(10, 35) + 'vw';
       // start animation
-      shootingStar.classList.add('animate');
+      this.showShootingStar = true;
     },
     shootingStarEnd: function () {
-      var shootingStar = document.querySelector('.shooting-star');
-      // remove animation class
-      shootingStar.classList.remove('animate');
+      this.showShootingStar = false;
     },
     earthSequence: function () {
       // reset the mountain shortcuts
