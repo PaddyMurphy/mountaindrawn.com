@@ -1,3 +1,12 @@
+<!--
+  TODO: change to svg animation
+  - use velocityjs (does not support morphing)
+  - gsap alternative: http://thednp.github.io/kute.js/svg.html
+  - NOTE: smil animate is depricated
+  <polygon id="shard-1" points="..start points..">
+    <animate attributeName="points" dur="500ms" to="..end points.." />
+  </polygon>
+-->
 <template>
   <div class="mountaindrawn" v-bind:class="{ supportsClipPath }">
     <svg style="display: none;">
@@ -21,7 +30,7 @@
           </svg>
         </a>
 
-        <a href="#" class="nav-earth"></a>
+        <a href="#" class="nav-earth" v-on:click="navigateEarth"></a>
 
         <a href="#" class="nav-arrow nav-right" v-on:click="navigateRight">
           <svg class="arrow-right" viewBox="0 0 56 49">
@@ -35,10 +44,10 @@
           <div v-for="n in 30" class="rock"></div>
 
           <!-- earth's mountains -->
-          <div class="earth-mtn earth-mtn-bugaboo" data-mountain="bugaboo"></div>
-          <div class="earth-mtn earth-mtn-tetons" data-mountain="tetons"></div>
-          <div class="earth-mtn earth-mtn-blanca-traverse" data-mountain="blanca-traverse"></div>
-          <div class="earth-mtn earth-mtn-glacier-peak" data-mountain="glacier-peak"></div>
+          <div class="earth-mtn earth-mtn-bugaboo" data-mountain="bugaboo" data-index="1" v-on:mouseover="hoverMtnShortcut"></div>
+          <div class="earth-mtn earth-mtn-tetons" data-mountain="tetons" data-index="2" v-on:mouseover="hoverMtnShortcut"></div>
+          <div class="earth-mtn earth-mtn-blanca-traverse" data-mountain="blanca-traverse" data-index="3" v-on:mouseover="hoverMtnShortcut"></div>
+          <div class="earth-mtn earth-mtn-glacier-peak" data-mountain="glacier-peak" data-index="4" v-on:mouseover="hoverMtnShortcut"></div>
 
           <div class="earth-outline"></div>
         </div>
@@ -124,6 +133,7 @@
 
 <script>
 import mountaindata from '../mountaindata.json';
+import supports from '../test-clip-path.js';
 
 export default {
   name: 'mountain',
@@ -135,6 +145,7 @@ export default {
       prominence: '',
       title: '',
       earthStarted: false,
+      earthMtnActive: '',
       mountains: mountaindata.mountains,
       length: mountaindata.mountains.length - 1,
       mountainHeight: 500,
@@ -154,7 +165,7 @@ export default {
       this.earthSequence();
     }
     // test for clip-path support
-    if (this.areClipPathShapesSupported()) {
+    if (supports.areClipPathShapesSupported()) {
       this.supportsClipPath = 'supports-clip-path';
       // TODO: setMtnClickEvents();
     }
@@ -169,7 +180,8 @@ export default {
     setEvents: function () {
       window.addEventListener('resize', this.sizeshards);
       // TODO: does vue handle transitionend event?
-      window.addEventListener('transitionend', this.shootingStarEnd, false);
+      this.$el.querySelector('.shooting-star')
+        .addEventListener('transitionend', this.shootingStarEnd, false);
     },
     navigateRight: function () {
       // start at beginning again if at end
@@ -198,6 +210,16 @@ export default {
       this.description = mountain.description;
       this.elevation = mountain.elevation;
       this.prominence = mountain.prominence;
+
+      // only show if there is a title
+      // earth is blank so hide it
+      // if (this.title.length) {
+      //   // show the data box
+      //   data.classList.remove('transparent');
+      // } else {
+      //   // hide data for earth
+      //   data.classList.add('transparent');
+      // }
     },
     sizeshards: function () {
       // NOTE: maintain aspect ration of 5:3
@@ -206,7 +228,7 @@ export default {
       // i.e. (600 / 1000) x 500 = 300
       // width = new height * (original width / original height)
       var width = document.body.offsetWidth;
-      var maxHeight = document.querySelector('.container').offsetHeight - 50;
+      var maxHeight = this.$el.querySelector('.container').offsetHeight - 50;
       var w = width;
       var h = Math.round(0.60 * w);
       var ratio = (w / h); // 5:3
@@ -236,6 +258,9 @@ export default {
     shootingStarEnd: function () {
       this.showShootingStar = false;
     },
+    navigateEarth: function () {
+      this.currentMountain = 0;
+    },
     earthSequence: function () {
       // reset the mountain shortcuts
       // mtnShortcutReset();
@@ -257,37 +282,19 @@ export default {
 
       this.earthStarted = true;
     },
-    // test for clip-path support
-    // from http://codepen.io/anon/pen/YXyyMJ
-    // in this thread http://stackoverflow.com/questions/27558996/how-can-i-test-for-clip-path-support
-    // TODO: import this from separate file
-    areClipPathShapesSupported: function () {
-      var base = 'clipPath';
-      var prefixes = [ 'webkit', 'moz', 'ms', 'o' ];
-      var properties = [ base ];
-      var testElement = document.createElement('testelement');
-      var attribute = 'polygon(50% 0%, 0% 100%, 100% 100%)';
+    hoverMtnShortcut: function (e) {
+      this.earthMtnActive = e.target.dataset.mountain;
+      // console.log(this.earthMtnActive);
+      // console.log(this.getMountainIndex());
+      // show mountain info on hover
+      this.setData(this.earthMtnActive);
+      // // keep selected until another hover
+      // mtnShortcutReset();
+      // // show the photos
+      // getMountainImages(e.target.dataset.mountain);
 
-      // Push the prefixed properties into the array of properties.
-      for (var i = 0, l = prefixes.length; i < l; i++) {
-        var prefixedProperty = prefixes[i] + base.charAt(0).toUpperCase() + base.slice(1); // remember to capitalize!
-        properties.push(prefixedProperty);
-      }
-      // Interate over the properties and see if they pass two tests.
-      for (var i = 0, l = properties.length; i < l; i++) { // eslint-disable-line
-        var property = properties[i];
-
-        // First, they need to even support clip-path (IE <= 11 does not)...
-        if (testElement.style[property] === '') {
-          // Second, we need to see what happens when we try to create a CSS shape...
-          testElement.style[property] = attribute;
-          if (testElement.style[property] !== '') {
-            return true;
-          }
-        }
-      }
-
-      return false;
+      // e.target.classList.add('hover');
+      // data.classList.add('animate');
     }
   }
 }

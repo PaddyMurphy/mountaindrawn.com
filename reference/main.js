@@ -23,10 +23,10 @@ $(function() {
   // events
   // DONE: navLeft.addEventListener('click', navigateLeft, false);
   // DONE: navRight.addEventListener('click', navigateRight, false);
-  navEarth.addEventListener('click', navigateEarth, false);
+  // DONE: navEarth.addEventListener('click', navigateEarth, false);
   dataClose.addEventListener('click', closeDateBox, false);
   data.addEventListener('click', viewMountain, false);
-  shootingStar.addEventListener('transitionend', shootingStarEnd, false);
+  // DONE: shootingStar.addEventListener('transitionend', shootingStarEnd, false);
   // DONE: window.addEventListener('resize', sizeshards, false);
 
   // keyboard navigation
