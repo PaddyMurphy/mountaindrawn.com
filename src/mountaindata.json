@@ -2,13 +2,20 @@
   "mountains": [
   {
     "id": "earth",
-    "title": ""
+    "title": "",
+    "photos": ""
   }, {
     "id": "bugaboo",
     "title": "Bugaboo Spire",
     "elevation": "10,512 ft",
     "prominence": "1,437 ft",
     "description": "North Ridge, a top 50 climb",
+    "photos": [
+      {"src": "/static/img/mtn-sm-bugaboo-1.jpg"},
+      {"src": "/static/img/mtn-sm-bugaboo-2.jpg"},
+      {"src": "/static/img/mtn-sm-bugaboo-3.jpg"},
+      {"src": "/static/img/mtn-sm-bugaboo-4.jpg"}
+    ],
     "polygons": [
       {"id": "shard-1", "fill": "#E5DED9", "points": "225.355469 35.9257812 236.003906 44.8339844 231.189453 74.0039062"},
       {"id": "shard-2", "fill": "#C1B8AE", "points": "246.516602 47.7265625 267.601562 63.6699219 277.662109 169.519043 253.988281 87.6191406"},
@@ -41,18 +48,36 @@
     "title": "The Grand Teton",
     "elevation": "13,776 ft",
     "prominence": "6,529 ft",
-    "description": "Exum Ridge route"
+    "description": "Exum Ridge route",
+    "photos": [
+      {"src": "/static/img/mtn-sm-tetons-1.jpg"},
+      {"src": "/static/img/mtn-sm-tetons-2.jpg"},
+      {"src": "/static/img/mtn-sm-tetons-3.jpg"},
+      {"src": "/static/img/mtn-sm-tetons-4.jpg"}
+    ]
   }, {
     "id": "blanca-traverse",
     "title": "Little Bear - Blanca Traverse",
     "elevation": "14,344 ft",
     "prominence": "5,325 ft",
-    "description": "Ridge route with 6000+ feet of gain"
+    "description": "Ridge route with 6000+ feet of gain",
+    "photos": [
+      {"src": "/static/img/mtn-sm-blanca-traverse-1.jpg"},
+      {"src": "/static/img/mtn-sm-blanca-traverse-2.jpg"},
+      {"src": "/static/img/mtn-sm-blanca-traverse-3.jpg"},
+      {"src": "/static/img/mtn-sm-blanca-traverse-4.jpg"}
+    ]
   }, {
     "id": "glacier-peak",
     "title": "Glacier Peak",
     "elevation": "10,541 ft",
     "prominence": "7,497 ft",
-    "description": "Glissade all day"
+    "description": "Glissade all day",
+    "photos": [
+      {"src": "/static/img/mtn-sm-glacier-peak-1.jpg"},
+      {"src": "/static/img/mtn-sm-glacier-peak-2.jpg"},
+      {"src": "/static/img/mtn-sm-glacier-peak-3.jpg"},
+      {"src": "/static/img/mtn-sm-glacier-peak-4.jpg"}
+    ]
   }]
 }

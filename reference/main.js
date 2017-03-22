@@ -24,8 +24,8 @@ $(function() {
   // DONE: navLeft.addEventListener('click', navigateLeft, false);
   // DONE: navRight.addEventListener('click', navigateRight, false);
   // DONE: navEarth.addEventListener('click', navigateEarth, false);
-  dataClose.addEventListener('click', closeDateBox, false);
-  data.addEventListener('click', viewMountain, false);
+  // DONE: dataClose.addEventListener('click', closeDateBox, false);
+  // DONE: data.addEventListener('click', viewMountain, false);
   // DONE: shootingStar.addEventListener('transitionend', shootingStarEnd, false);
   // DONE: window.addEventListener('resize', sizeshards, false);
 
