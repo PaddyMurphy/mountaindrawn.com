@@ -114,25 +114,25 @@
           <router-link to="/bugaboo" class="earth-mtn-hover" data-mountain="bugaboo">
             <img class="b-lazy"
               src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-              :data-src="'/static/img/mtn-sm-bugaboo-1.jpg'"
+              :data-src="'static/img/mtn-sm-bugaboo-1.jpg'"
               width="150" height="150" title="The Bugaboos">
           </router-link>
           <router-link to="/blanca-traverse" class="earth-mtn-hover" data-mountain="blanca-traverse">
             <img class="b-lazy"
               src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-              :data-src="'/static/img/mtn-sm-blanca-traverse-1.jpg'"
+              :data-src="'static/img/mtn-sm-blanca-traverse-1.jpg'"
               width="150" height="150" title="Little Bear - Blanca Traverse">
           </router-link>
           <router-link to="/tetons" class="earth-mtn-hover" data-mountain="tetons">
             <img class="b-lazy"
               src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-              :data-src="'/static/img/mtn-sm-tetons-1.jpg'"
+              :data-src="'static/img/mtn-sm-tetons-1.jpg'"
               width="150" height="150" title="The Grand Teton">
           </router-link>
           <router-link to="/glacier-peak" class="earth-mtn-hover" data-mountain="glacier-peak">
             <img class="b-lazy"
               src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-              :data-src="'/static/img/mtn-sm-glacier-peak-1.jpg'"
+              :data-src="'static/img/mtn-sm-glacier-peak-1.jpg'"
               width="150" height="150" title="Glacier peak">
           </router-link>
         </div>
