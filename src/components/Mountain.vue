@@ -79,13 +79,7 @@
             <p class="data-description">{{ description }}</p>
           </div>
           <!-- TODO: add photos -->
-          <!-- <photos :earthMtnActive='earthMtnActive' :photos='photos'></photos> -->
-          <!-- NOTE: static path 404s in prod only -->
-          <div class="data-photos">
-            <a href="#" v-for="photo in photos">
-              <img :src="photo.src">
-            </a>
-          </div>
+          <photos :earthMtnActive='earthMtnActive' :photos='photos'></photos>
         </div>
       </div><!-- END .mountains-wrapper -->
 
