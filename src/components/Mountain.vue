@@ -78,8 +78,7 @@
             <p class="data-prominence">prominence {{ prominence }}</p>
             <p class="data-description">{{ description }}</p>
           </div>
-          <!-- TODO: add photos -->
-          <photos :earthMtnActive='earthMtnActive' :photos='photos'></photos>
+          <photos :photos='photos'></photos>
         </div>
       </div><!-- END .mountains-wrapper -->
 
@@ -111,30 +110,11 @@
         <div class="photos-container">
           <h3>The Mountains</h3>
           <!-- TODO: loop, make this dynamic -->
-          <router-link to="/bugaboo" class="earth-mtn-hover" data-mountain="bugaboo">
-            <img class="b-lazy"
-              src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-              :data-src="'static/img/mtn-sm-bugaboo-1.jpg'"
-              width="150" height="150" title="The Bugaboos">
-          </router-link>
-          <router-link to="/blanca-traverse" class="earth-mtn-hover" data-mountain="blanca-traverse">
-            <img class="b-lazy"
-              src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-              :data-src="'static/img/mtn-sm-blanca-traverse-1.jpg'"
-              width="150" height="150" title="Little Bear - Blanca Traverse">
-          </router-link>
-          <router-link to="/tetons" class="earth-mtn-hover" data-mountain="tetons">
-            <img class="b-lazy"
-              src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-              :data-src="'static/img/mtn-sm-tetons-1.jpg'"
-              width="150" height="150" title="The Grand Teton">
-          </router-link>
-          <router-link to="/glacier-peak" class="earth-mtn-hover" data-mountain="glacier-peak">
-            <img class="b-lazy"
-              src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
-              :data-src="'static/img/mtn-sm-glacier-peak-1.jpg'"
-              width="150" height="150" title="Glacier peak">
-          </router-link>
+          <mountain-photo-nav
+            v-for="mountain in mountains"
+            :mountain="mountain"
+            :key="mountain.id">
+          </mountain-photo-nav>
         </div>
       </div>
       <footer>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike</a>. Take what you need and share.</footer>
@@ -162,6 +142,7 @@ import mountaindata from '../mountaindata.json';
 import supports from '../test-clip-path.js';
 import Blazy from 'bLazy';
 import Photos from '@/components/Photos';
+import MountainPhotoNav from '@/components/MountainPhotoNav';
 
 export default {
   name: 'mountain',
@@ -189,7 +170,8 @@ export default {
     }
   },
   components: {
-    'photos': Photos
+    'photos': Photos,
+    'mountain-photo-nav': MountainPhotoNav
   },
   mounted: function () {
     // console.log(this.$route);

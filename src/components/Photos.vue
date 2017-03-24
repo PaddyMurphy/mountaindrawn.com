@@ -1,15 +1,14 @@
 <template>
   <div class="data-photos">
-    <!-- NOTE: error on require(photo.src) -->
-    <a href="#" v-for="photo in photos">
+    <a href="#" v-on:click.stop v-for="photo in photos">
       <img :src="photo.src">
     </a>
   </div>
 </template>
-<script>
 
+<script>
 export default {
   name: 'photos',
-  props: ['earthMtnActive', 'photos']
+  props: ['photos']
 }
 </script>
