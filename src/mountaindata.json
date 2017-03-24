@@ -3,13 +3,15 @@
   {
     "id": "earth",
     "title": "",
-    "photos": ""
+    "photos": "",
+    "isMountain": "false"
   }, {
     "id": "bugaboo",
     "title": "Bugaboo Spire",
     "elevation": "10,512 ft",
     "prominence": "1,437 ft",
     "description": "North Ridge, a top 50 climb",
+    "isMountain": "true",
     "photos": [
       {"src": "static/img/mtn-sm-bugaboo-1.jpg"},
       {"src": "static/img/mtn-sm-bugaboo-2.jpg"},
@@ -49,6 +51,7 @@
     "elevation": "13,776 ft",
     "prominence": "6,529 ft",
     "description": "Exum Ridge route",
+    "isMountain": "true",
     "photos": [
       {"src": "static/img/mtn-sm-tetons-1.jpg"},
       {"src": "static/img/mtn-sm-tetons-2.jpg"},
@@ -61,6 +64,7 @@
     "elevation": "14,344 ft",
     "prominence": "5,325 ft",
     "description": "Ridge route with 6000+ feet of gain",
+    "isMountain": "true",
     "photos": [
       {"src": "static/img/mtn-sm-blanca-traverse-1.jpg"},
       {"src": "static/img/mtn-sm-blanca-traverse-2.jpg"},
@@ -73,6 +77,7 @@
     "elevation": "10,541 ft",
     "prominence": "7,497 ft",
     "description": "Glissade all day",
+    "isMountain": "true",
     "photos": [
       {"src": "static/img/mtn-sm-glacier-peak-1.jpg"},
       {"src": "static/img/mtn-sm-glacier-peak-2.jpg"},

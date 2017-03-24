@@ -41,26 +41,19 @@
 
       <div class="mountains-wrapper">
         <div class="mountains" v-bind:style="{ height: mountainHeight + 'px', width: mountainWidth + 'px' }">
+
           <div v-for="n in 30" class="rock"></div>
 
           <!-- earth's mountains -->
-          <!-- TODO: loop, make this dynamic -->
-          <div class="earth-mtn earth-mtn-bugaboo" data-mountain="bugaboo" data-index="1"
-            @mouseover="hoverMtnShortcut"
-            @click="clickMtnShortcut"
-          ></div>
-          <div class="earth-mtn earth-mtn-tetons" data-mountain="tetons" data-index="2"
-            @mouseover="hoverMtnShortcut"
-            @click="clickMtnShortcut"
-          ></div>
-          <div class="earth-mtn earth-mtn-blanca-traverse" data-mountain="blanca-traverse" data-index="3"
-            @mouseover="hoverMtnShortcut"
-            @click="clickMtnShortcut"
-          ></div>
-          <div class="earth-mtn earth-mtn-glacier-peak" data-mountain="glacier-peak" data-index="4"
-            @mouseover="hoverMtnShortcut"
-            @click="clickMtnShortcut"
-          ></div>
+          <mountain-earth-nav
+            v-for="(mountain, index) in mountains"
+            :mountain="mountain"
+            :key="mountain.id"
+            :index="index"
+            :hoverMtnShortcut="hoverMtnShortcut"
+            :clickMtnShortcut="clickMtnShortcut"
+          >
+          </mountain-earth-nav>
 
           <div class="earth-outline"></div>
         </div>
@@ -109,7 +102,7 @@
 
         <div class="photos-container">
           <h3>The Mountains</h3>
-          <!-- TODO: loop, make this dynamic -->
+
           <mountain-photo-nav
             v-for="mountain in mountains"
             :mountain="mountain"
@@ -142,6 +135,7 @@ import mountaindata from '../mountaindata.json';
 import supports from '../test-clip-path.js';
 import Blazy from 'bLazy';
 import Photos from '@/components/Photos';
+import MountainEarthNav from '@/components/MountainEarthNav';
 import MountainPhotoNav from '@/components/MountainPhotoNav';
 
 export default {
@@ -171,7 +165,8 @@ export default {
   },
   components: {
     'photos': Photos,
-    'mountain-photo-nav': MountainPhotoNav
+    'mountain-photo-nav': MountainPhotoNav,
+    'mountain-earth-nav': MountainEarthNav
   },
   mounted: function () {
     // console.log(this.$route);
@@ -236,6 +231,8 @@ export default {
       var mountainId = this.mountains[this.currentMountain].id;
       // get id and set to body dataset
       document.body.dataset.mountain = mountainId;
+      this.photos = this.mountains[this.currentMountain].photos;
+
       this.setData();
       // TODO
       // Router.navigate('#/' + mountain);
@@ -250,7 +247,6 @@ export default {
       this.elevation = mountain.elevation;
       this.id = mountain.id;
       this.prominence = mountain.prominence;
-
       // only show if there is a title
       // earth is blank so hide it
       // TODO: create computed property to determine if data is shown
@@ -324,6 +320,7 @@ export default {
       this.earthStarted = true;
     },
     hoverMtnShortcut: function (e) {
+      console.log(e.target);
       // set active icon
       this.earthMtnActive = parseInt(e.target.dataset.index, 10);
       this.photos = this.mountains[this.earthMtnActive].photos;
@@ -347,7 +344,10 @@ export default {
       this.currentMountain = parseInt(mountain.target.dataset.index, 10);
     },
     clickData: function () {
-      this.currentMountain = this.earthMtnActive;
+      // only click if earth
+      if (this.currentMountain === 0) {
+        this.currentMountain = this.earthMtnActive;
+      }
     },
     checkKey: function (e) {
       if (e.keyCode === 37) {
