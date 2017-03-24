@@ -13,10 +13,10 @@
     "description": "North Ridge, a top 50 climb",
     "isMountain": "true",
     "photos": [
-      {"src": "static/img/mtn-sm-bugaboo-1.jpg"},
-      {"src": "static/img/mtn-sm-bugaboo-2.jpg"},
-      {"src": "static/img/mtn-sm-bugaboo-3.jpg"},
-      {"src": "static/img/mtn-sm-bugaboo-4.jpg"}
+      {"src": "static/img/mtn-sm-bugaboo-1.jpg", "lg": "static/img/mtn-lg-bugaboo-1.jpg"},
+      {"src": "static/img/mtn-sm-bugaboo-2.jpg", "lg": "static/img/mtn-lg-bugaboo-2.jpg"},
+      {"src": "static/img/mtn-sm-bugaboo-3.jpg", "lg": "static/img/mtn-lg-bugaboo-3.jpg"},
+      {"src": "static/img/mtn-sm-bugaboo-4.jpg", "lg": "static/img/mtn-lg-bugaboo-4.jpg"}
     ],
     "polygons": [
       {"id": "shard-1", "fill": "#E5DED9", "points": "225.355469 35.9257812 236.003906 44.8339844 231.189453 74.0039062"},
@@ -53,10 +53,10 @@
     "description": "Exum Ridge route",
     "isMountain": "true",
     "photos": [
-      {"src": "static/img/mtn-sm-tetons-1.jpg"},
-      {"src": "static/img/mtn-sm-tetons-2.jpg"},
-      {"src": "static/img/mtn-sm-tetons-3.jpg"},
-      {"src": "static/img/mtn-sm-tetons-4.jpg"}
+      {"src": "static/img/mtn-sm-tetons-1.jpg", "lg": "static/img/mtn-lg-tetons-1.jpg"},
+      {"src": "static/img/mtn-sm-tetons-2.jpg", "lg": "static/img/mtn-lg-tetons-2.jpg"},
+      {"src": "static/img/mtn-sm-tetons-3.jpg", "lg": "static/img/mtn-lg-tetons-3.jpg"},
+      {"src": "static/img/mtn-sm-tetons-4.jpg", "lg": "static/img/mtn-lg-tetons-4.jpg"}
     ]
   }, {
     "id": "blanca-traverse",
@@ -66,10 +66,10 @@
     "description": "Ridge route with 6000+ feet of gain",
     "isMountain": "true",
     "photos": [
-      {"src": "static/img/mtn-sm-blanca-traverse-1.jpg"},
-      {"src": "static/img/mtn-sm-blanca-traverse-2.jpg"},
-      {"src": "static/img/mtn-sm-blanca-traverse-3.jpg"},
-      {"src": "static/img/mtn-sm-blanca-traverse-4.jpg"}
+      {"src": "static/img/mtn-sm-blanca-traverse-1.jpg", "lg": "static/img/mtn-lg-blanca-traverse-1.jpg"},
+      {"src": "static/img/mtn-sm-blanca-traverse-2.jpg", "lg": "static/img/mtn-lg-blanca-traverse-2.jpg"},
+      {"src": "static/img/mtn-sm-blanca-traverse-3.jpg", "lg": "static/img/mtn-lg-blanca-traverse-3.jpg"},
+      {"src": "static/img/mtn-sm-blanca-traverse-4.jpg", "lg": "static/img/mtn-lg-blanca-traverse-4.jpg"}
     ]
   }, {
     "id": "glacier-peak",
@@ -79,10 +79,10 @@
     "description": "Glissade all day",
     "isMountain": "true",
     "photos": [
-      {"src": "static/img/mtn-sm-glacier-peak-1.jpg"},
-      {"src": "static/img/mtn-sm-glacier-peak-2.jpg"},
-      {"src": "static/img/mtn-sm-glacier-peak-3.jpg"},
-      {"src": "static/img/mtn-sm-glacier-peak-4.jpg"}
+      {"src": "static/img/mtn-sm-glacier-peak-1.jpg", "lg": "static/img/mtn-lg-glacier-peak-1.jpg"},
+      {"src": "static/img/mtn-sm-glacier-peak-2.jpg", "lg": "static/img/mtn-lg-glacier-peak-2.jpg"},
+      {"src": "static/img/mtn-sm-glacier-peak-3.jpg", "lg": "static/img/mtn-lg-glacier-peak-3.jpg"},
+      {"src": "static/img/mtn-sm-glacier-peak-4.jpg", "lg": "static/img/mtn-lg-glacier-peak-4.jpg"}
     ]
   }]
 }

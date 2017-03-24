@@ -71,7 +71,15 @@
             <p class="data-prominence">prominence {{ prominence }}</p>
             <p class="data-description">{{ description }}</p>
           </div>
-          <photos :photos='photos'></photos>
+
+          <div class="data-photos">
+            <photos
+              v-for="photo in photos"
+              :photo="photo"
+              :key="photo.src"
+            >
+            </photos>
+          </div>
         </div>
       </div><!-- END .mountains-wrapper -->
 
@@ -134,6 +142,7 @@
 import mountaindata from '../mountaindata.json';
 import supports from '../test-clip-path.js';
 import Blazy from 'bLazy';
+import Baguettebox from 'baguettebox.js';
 import Photos from '@/components/Photos';
 import MountainEarthNav from '@/components/MountainEarthNav';
 import MountainPhotoNav from '@/components/MountainPhotoNav';
@@ -199,7 +208,6 @@ export default {
     // test for clip-path support
     if (supports.areClipPathShapesSupported()) {
       this.supportsClipPath = 'supports-clip-path';
-      // TODO: setMtnClickEvents();
     }
   },
   beforeDestroy: function () {
@@ -234,9 +242,6 @@ export default {
       this.photos = this.mountains[this.currentMountain].photos;
 
       this.setData();
-      // TODO
-      // Router.navigate('#/' + mountain);
-      // getMountainImages(mountain);
     },
     setData: function (id) {
       // @id (optional) pass in mountain or use currentMountain
@@ -257,6 +262,16 @@ export default {
         // hide data for earth
         this.$el.querySelector('.data').classList.add('transparent');
       }
+
+      this.setupPhotoGallery();
+    },
+    setupPhotoGallery: function () {
+      // TODO: should only init once. add default photos
+      setTimeout(function () {
+        Baguettebox.run('.data-photos', {
+          fullScreen: false
+        });
+      }, 0);
     },
     sizeshards: function () {
       // NOTE: maintain aspect ration of 5:3
@@ -320,7 +335,6 @@ export default {
       this.earthStarted = true;
     },
     hoverMtnShortcut: function (e) {
-      console.log(e.target);
       // set active icon
       this.earthMtnActive = parseInt(e.target.dataset.index, 10);
       this.photos = this.mountains[this.earthMtnActive].photos;
@@ -376,4 +390,5 @@ export default {
 @import '../assets/scss/_blanca-traverse.scss';
 @import '../assets/scss/_glacier-peak.scss';
 @import '../assets/scss/_tetons.scss';
+@import '../assets/scss/_baguetteBox.scss';
 </style>

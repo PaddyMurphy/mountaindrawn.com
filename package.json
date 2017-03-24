@@ -12,6 +12,7 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs"
   },
   "dependencies": {
+    "baguettebox.js": "^1.8.2",
     "blazy": "^1.8.2",
     "vue": "^2.2.1",
     "vue-router": "^2.2.0"
