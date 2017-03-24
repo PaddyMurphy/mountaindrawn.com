@@ -2,6 +2,10 @@
 
 > vue.js based mountaindrawn.com
 
+## Notes
+
+Static images: for images to show on subdomains format src like 'static/img/image-name.jpg'
+
 ## Build Setup
 
 ``` bash
