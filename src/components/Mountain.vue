@@ -63,7 +63,7 @@
             <div class="static-mountain"></div>
         </div>
 
-        <div class="data transparent" @click="clickData">
+        <div class="data" :class="{transparent: !photos}" @click="clickData">
           <div class="data-content">
             <h2 class="data-title">{{ title }}</h2>
             <p class="data-elevation">elevation
@@ -112,9 +112,12 @@
           <h3>The Mountains</h3>
 
           <mountain-photo-nav
-            v-for="mountain in mountains"
+            v-for="(mountain, index) in mountains"
             :mountain="mountain"
-            :key="mountain.id">
+            :key="mountain.id"
+            :index="index"
+            :setCurrentMountain="setCurrentMountain"
+            >
           </mountain-photo-nav>
         </div>
       </div>
@@ -178,10 +181,9 @@ export default {
     'mountain-earth-nav': MountainEarthNav
   },
   mounted: function () {
-    // console.log(this.$route);
+    // navigate to bookmarked url
     if (this.$route.name === 'MountainUrl') {
-      // TODO: change navigate to use id instead of index
-      // console.log(this.$route.params.mountain);
+      this.currentMountain = this.mountains.findIndex(this.returnIndex);
     }
 
     this.sizeshards();
@@ -189,15 +191,7 @@ export default {
 
     setTimeout(function () {
       var bLazy = new Blazy({ // eslint-disable-line
-        offset: -70,
-        error: function (ele, msg) {
-          if (msg === 'missing') {
-            console.log('Data-src is missing');
-          } // eslint-disable-line
-          else if (msg === 'invalid') {
-            console.log('Data-src is invalid');
-          }
-        }
+        offset: -70
       });
     }, 1000);
 
@@ -214,11 +208,17 @@ export default {
     window.removeEventListener('resize', this.sizeshards);
   },
   watch: {
-    currentMountain: 'navigate'
+    currentMountain: 'navigate',
+    '$route' (to, from) {
+      // console.log('watch route');
+      // this.currentMountain = this.mountains.findIndex(this.returnIndex);
+    }
   },
   methods: {
-    transitionComplete: function (el) {
-      console.log('transitionComplete');
+    returnIndex: function (el) {
+      // returns indexOf el
+      // TODO: test compatibility with IE
+      return el.id === this.$route.params.mountain;
     },
     setEvents: function () {
       window.addEventListener('resize', this.sizeshards);
@@ -241,7 +241,16 @@ export default {
       document.body.dataset.mountain = mountainId;
       this.photos = this.mountains[this.currentMountain].photos;
 
+      // console.log(this.$router);
+      // update url
+      // this.$router.push({name: 'MountainUrl', params: {'mountain': mountainId}})
+
       this.setData();
+    },
+    setCurrentMountain: function (index) {
+      console.log(index);
+      console.log('setCurrentMountain');
+      this.currentMountain = index;
     },
     setData: function (id) {
       // @id (optional) pass in mountain or use currentMountain
@@ -252,16 +261,6 @@ export default {
       this.elevation = mountain.elevation;
       this.id = mountain.id;
       this.prominence = mountain.prominence;
-      // only show if there is a title
-      // earth is blank so hide it
-      // TODO: create computed property to determine if data is shown
-      if (this.title.length) {
-        // show the data box
-        this.$el.querySelector('.data').classList.remove('transparent');
-      } else {
-        // hide data for earth
-        this.$el.querySelector('.data').classList.add('transparent');
-      }
 
       this.setupPhotoGallery();
     },
@@ -343,8 +342,6 @@ export default {
       // keep selected until another icon is hovered
       this.mtnShortcutReset();
       e.target.classList.add('hover');
-      // show the photos
-      // getMountainImages(e.target.dataset.mountain);
     },
     mtnShortcutReset: function () {
       var earthMountains = this.$el.querySelectorAll('.earth-mtn');

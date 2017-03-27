@@ -1,5 +1,10 @@
 <template>
-  <router-link v-if="mountain.photos" :to="mountain.id" class="earth-mtn-hover" :data-mountain="mountain.id">
+  <router-link
+  	v-if="mountain.photos"
+  	class="earth-mtn-hover"
+  	:to="mountain.id"
+  	:data-mountain="mountain.id"
+  	@click="setCurrentMountain">
     <img class="b-lazy"
       src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
       :data-src="mountain.photos[0].src"
@@ -11,6 +16,6 @@
 
 export default {
   name: 'mountain-photo-nav',
-  props: ['mountain']
+  props: ['index', 'mountain', 'setCurrentMountain']
 }
 </script>

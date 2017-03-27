@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="JSON.parse(mountain.isMountain)"
+    v-if="mountain.photos"
     :class="'earth-mtn ' + 'earth-mtn-' + mountain.id"
     :data-mountain="mountain.id"
     :data-index="index"
