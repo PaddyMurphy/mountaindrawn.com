@@ -4,7 +4,7 @@
   	class="earth-mtn-hover"
   	:to="mountain.id"
   	:data-mountain="mountain.id"
-  	@click="setCurrentMountain">
+  	@click.native="setCurrentMountain(mountain.id)">
     <img class="b-lazy"
       src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
       :data-src="mountain.photos[0].src"

@@ -24,19 +24,30 @@
       <h1 class="title">{{ title }}</h1>
 
       <div class="title-nav">
-        <a href="#" class="nav-arrow nav-left" @click="navigateLeft">
+
+        <router-link
+          class="nav-arrow nav-left"
+          :to="previousMountainId"
+          @click.native="setCurrentMountain(previousMountainIndex)">
           <svg class="arrow-left" viewBox="0 0 56 49">
             <use xlink:href="#arrow-left" />
           </svg>
-        </a>
+        </router-link>
 
-        <a href="#" class="nav-earth" @click="navigateEarth"></a>
+        <router-link
+          class="nav-earth"
+          :to="'earth'"
+          @click.native="navigateEarth">
+        </router-link>
 
-        <a href="#" class="nav-arrow nav-right" @click="navigateRight">
+        <router-link
+          class="nav-arrow nav-right"
+          :to="previousMountainId"
+          @click.native="setCurrentMountain(previousMountainIndex)">
           <svg class="arrow-right" viewBox="0 0 56 49">
             <use xlink:href="#arrow-left" />
           </svg>
-        </a>
+        </router-link>
       </div>
 
       <div class="mountains-wrapper">
@@ -208,18 +219,23 @@ export default {
     window.removeEventListener('resize', this.sizeshards);
   },
   watch: {
-    currentMountain: 'navigate',
-    '$route' (to, from) {
-      // console.log('watch route');
-      // this.currentMountain = this.mountains.findIndex(this.returnIndex);
+    currentMountain: 'navigate'
+  },
+  computed: {
+    nextMountainIndex: function () {
+      return (this.currentMountain === this.length) ? 0 : (this.currentMountain + 1);
+    },
+    nextMountainId: function () {
+      return this.mountains[this.nextMountainIndex].id;
+    },
+    previousMountainIndex: function () {
+      return (this.currentMountain === 0) ? this.length : (this.currentMountain - 1);
+    },
+    previousMountainId: function () {
+      return this.mountains[this.previousMountainIndex].id;
     }
   },
   methods: {
-    returnIndex: function (el) {
-      // returns indexOf el
-      // TODO: test compatibility with IE
-      return el.id === this.$route.params.mountain;
-    },
     setEvents: function () {
       window.addEventListener('resize', this.sizeshards);
       document.onkeydown = this.checkKey;
@@ -229,11 +245,11 @@ export default {
     },
     navigateRight: function () {
       // start at beginning again if at end
-      this.currentMountain = (this.currentMountain === this.length) ? 0 : (this.currentMountain + 1);
+      this.currentMountain = this.nextMountainIndex;
     },
     navigateLeft: function () {
       // start at end again if at beginning
-      this.currentMountain = (this.currentMountain === 0) ? this.length : (this.currentMountain - 1);
+      this.currentMountain = this.previousMountainIndex;
     },
     navigate: function () {
       var mountainId = this.mountains[this.currentMountain].id;
@@ -241,16 +257,29 @@ export default {
       document.body.dataset.mountain = mountainId;
       this.photos = this.mountains[this.currentMountain].photos;
 
+      this.setData();
+
       // console.log(this.$router);
       // update url
-      // this.$router.push({name: 'MountainUrl', params: {'mountain': mountainId}})
-
-      this.setData();
+      // this.$router.push({
+      //   name: 'MountainUrl',
+      //   params: {'mountain': mountainId}
+      // });
+    },
+    returnIndex: function (el) {
+      // returns indexOf el
+      // TODO: test compatibility with IE
+      // console.log(el);
+      return el.id === this.$route.params.mountain;
     },
     setCurrentMountain: function (index) {
-      console.log(index);
-      console.log('setCurrentMountain');
-      this.currentMountain = index;
+      // @index (string or number)
+      // TODO: convert all params to index or id
+      if (typeof (index) === 'string') {
+        this.currentMountain = this.mountains.findIndex(this.returnIndex);
+      } else {
+        this.currentMountain = index;
+      }
     },
     setData: function (id) {
       // @id (optional) pass in mountain or use currentMountain
@@ -361,6 +390,7 @@ export default {
       }
     },
     checkKey: function (e) {
+      // TODO: update url on key navigation
       if (e.keyCode === 37) {
         // left arrow
         this.navigateLeft();
@@ -371,11 +401,6 @@ export default {
     }
   }
 }
-
-// TODO:
-// event handlers:
-//   nav, keyboard, resize
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
