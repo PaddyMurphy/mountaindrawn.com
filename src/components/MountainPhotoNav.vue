@@ -13,7 +13,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'mountain-photo-nav',
   props: ['index', 'mountain', 'setCurrentMountain']

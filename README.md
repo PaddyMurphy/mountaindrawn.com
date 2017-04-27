@@ -1,6 +1,6 @@
 # mountaindrawn
 
-> vue.js based mountaindrawn.com
+Personal website of UI/UX developer Patrick Lewis. Feel free to take anything you find useful. This was my first test with vuejs. [mountaindrawn.com](https://mountaindrawn.com)
 
 ## Notes
 

@@ -11,7 +11,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'mountain-earth-nav',
   props: ['index', 'mountain', 'clickMtnShortcut', 'hoverMtnShortcut']

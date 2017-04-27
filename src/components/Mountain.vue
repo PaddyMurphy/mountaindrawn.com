@@ -1,14 +1,5 @@
-<!--
-  TODO: change to svg animation
-  - use velocityjs (does not support morphing)
-  - gsap alternative: http://thednp.github.io/kute.js/svg.html
-  - NOTE: smil animate is depricated
-  <polygon id="shard-1" points="..start points..">
-    <animate attributeName="points" dur="500ms" to="..end points.." />
-  </polygon>
--->
 <template>
-  <div class="mountaindrawn" v-bind:class="{ supportsClipPath }">
+  <div class="mountaindrawn" v-bind:class="supportsClipPath">
     <svg style="display: none;">
       <symbol viewBox="0 0 56 49" version="1.1">
         <g id="arrow-left" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -106,18 +97,8 @@
           </g>
       </svg>
       <div class="about-container">
-        <div class="about-block">
-          <h3>About</h3>
-          <p>Mountaindrawn is the personal site of UI/UX developer Patrick Lewis. The original site  built 7 years ago was a challenge for myself to create a hand drawn website featuring climbing trips (I kept an <a href="/dist/archived/blog/index.html">archived version</a>).</p>
 
-          <p>The current revision of mountaindrawn illustrates climbing trips using more recent technology than the pen & ink and watercolor used to create the original. The idea was to use all svg but after reading the <a href="https://www.html5rocks.com/en/tutorials/masking/adobe/">htmlrocks article on clipping</a> and seeing the amazingly simple <a href="http://species-in-pieces.com/">species-in-pieces</a> project I went with css clip-path. Svg illustrations are displayed if clip-path is not supported. (see <a href="http://caniuse.com/#search=clip-path">current support</a>)</p>
-
-          <p>The main purpose for doing this project was to learn some new technologies and techniques. Much of what I learned came from other blog posts, articles and examples on codepen. Feel free to learn from and use the <a href="https://github.com/PaddyMurphy/paddymurphy.github.io">source of this project.</a></p>
-
-          <p>There are several more mountains and route I plan on adding soon. A few at the top of the list are El Portrero Chico featuring the classic Estrallita, Mt Rainier Kautz Glacier Route, and the Mt Baker Coleman Headwall.</p>
-
-          <p>The <a href="/riverflow">Texas Riverflow app</a> is still available.</p>
-        </div>
+        <about />
 
         <div class="photos-container">
           <h3>The Mountains</h3>
@@ -157,6 +138,7 @@ import mountaindata from '../mountaindata.json';
 import supports from '../test-clip-path.js';
 import Blazy from 'bLazy';
 import Baguettebox from 'baguettebox.js';
+import About from '@/components/About';
 import Photos from '@/components/Photos';
 import MountainEarthNav from '@/components/MountainEarthNav';
 import MountainPhotoNav from '@/components/MountainPhotoNav';
@@ -187,6 +169,7 @@ export default {
     }
   },
   components: {
+    'about': About,
     'photos': Photos,
     'mountain-photo-nav': MountainPhotoNav,
     'mountain-earth-nav': MountainEarthNav
@@ -267,9 +250,6 @@ export default {
       // });
     },
     returnIndex: function (el) {
-      // returns indexOf el
-      // TODO: test compatibility with IE
-      // console.log(el);
       return el.id === this.$route.params.mountain;
     },
     setCurrentMountain: function (index) {
@@ -407,6 +387,7 @@ export default {
 <style lang="scss">
 @import '../assets/scss/_variables.scss';
 @import '../assets/scss/_utilities.scss';
+@import '../assets/scss/_no-clip-path.scss';
 @import '../assets/scss/_earth.scss';
 @import '../assets/scss/_bugaboo.scss';
 @import '../assets/scss/_blanca-traverse.scss';
