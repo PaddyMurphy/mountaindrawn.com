@@ -5,17 +5,17 @@ body[data-mountain="bugaboo"] {
 	background-color: #D2F13E;
 
 	.title {
-		color: $bugaboo-dark;
+		color: black;
 	}
 
-	.mountains {
-		background:
-		    radial-gradient(
-		      circle closest-side,
-		      yellow,
-		      rgba(255,255,0,0.001) // safari transparent fix
-		    );
-	}
+	// .mountains {
+	// 	background:
+	// 	    radial-gradient(
+	// 	      circle closest-side,
+	// 	      yellow,
+	// 	      rgba(255,255,0,0.001) // safari transparent fix
+	// 	    );
+	// }
 	// data box position
 	.data {
 		@include mquery(small) {

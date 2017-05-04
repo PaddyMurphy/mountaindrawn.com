@@ -279,11 +279,13 @@ export default {
       if (mountain) {
         vm.svgMountainsData.push(mountain);
       }
+
+      return mountain;
     },
     animateSvg: function () {
       const vm = this;
       let delay = 0;
-      let duration = 1000;
+      let duration = 1100;
       let mountain = vm.svgCurrentMountain;
 
       console.log(mountain);
@@ -302,19 +304,6 @@ export default {
           loop: false
         });
       });
-
-      // TODO: fix blanca-traverse paths to polygons
-      // TODO: loop through each shard and set points
-      // var morphing = Animejs({ // eslint-disable-line
-      //   targets: 'polygon[id*="shard-"]',
-      //   points: mountain.rocks,
-      //   easing: 'easeOutQuad',
-      //   duration: 2000,
-      //   loop: false,
-      //   run: function (anim) {
-      //     console.log('anim');
-      //   }
-      // });
     },
     setEvents: function () {
       window.addEventListener('resize', this.sizeRocks);
@@ -479,8 +468,8 @@ export default {
 @import '../assets/scss/_variables.scss';
 @import '../assets/scss/_utilities.scss';
 @import '../assets/scss/_earth.scss';
-// @import '../assets/scss/_bugaboo.scss';
-// @import '../assets/scss/_blanca-traverse.scss';
-// @import '../assets/scss/_glacier-peak.scss';
-// @import '../assets/scss/_tetons.scss';
+@import '../assets/scss/_bugaboo.scss';
+@import '../assets/scss/_blanca-traverse.scss';
+@import '../assets/scss/_glacier-peak.scss';
+@import '../assets/scss/_tetons.scss';
 </style>
