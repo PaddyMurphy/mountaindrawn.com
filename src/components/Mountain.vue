@@ -45,8 +45,8 @@
         <div class="mountains" v-bind:style="{ height: mountainHeight + 'px', width: mountainWidth + 'px' }">
 
           <svg
-            width="100%"
-            height="100%"
+            width="90%"
+            height="90%"
             :viewBox="svgCurrentMountain.viewBox"
             xmlns="http://www.w3.org/2000/svg"
             xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -54,8 +54,8 @@
             >
               <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                   <polygon v-if="id === 'earth'" id="earth-outline" fill="#CCE6F1" points="17.8025863 60.0757894 2.8334088 95.9172722 0.741210938 112.623692 10.2806369 164.704173 22.0597875 182.779748 48.5494647 209.860974 65.6242517 220.506497 73.0561523 223.449304 113.957471 235.847656 163.4824 232.924325 194.204371 222.403448 235.914213 191.666597 257.949348 154.136554 263.741211 121.370315 263.229657 103.292792 247.497939 60.2218586 233.571028 42.7753551 203.464071 19.4432373 189.238275 12.3637508 168.178349 4.98238798 125.104364 0.84765625 109.556575 1.56047387 78.08739 11.4990212 55.8146793 22.6002793 40.4642313 33.6820614"></polygon>
-
-                  <polygon v-for="n in svgCurrentMountain.rocks" :id="n.id" :fill="n.fill" :points="n.value"></polygon>
+                  <!-- display intially and then let js change values -->
+                  <polygon v-once v-for="n in svgCurrentMountain.rocks" :id="n.id" :fill="n.fill" :points="n.value"></polygon>
 
                   <g v-if="id === 'earth'">
                     <polygon id="nav-1" fill="#68498E" points="137 75.7246094 138.5625 63 144.035156 75.9667969"></polygon>
@@ -76,11 +76,6 @@
             :clickMtnShortcut="clickMtnShortcut"
           >
           </mountain-earth-nav> -->
-        </div>
-
-        <!-- no clip-path support -->
-        <div class="static-mountains">
-            <div class="static-mountain"></div>
         </div>
 
         <div class="data" :class="{transparent: !photos}" @click="clickData">
@@ -153,7 +148,7 @@
 
 <script>
 import mountaindata from '../mountaindata.json';
-import Animejs from 'animejs'; // eslint-disable-line
+import Animejs from 'animejs';
 import Blazy from 'bLazy';
 import Baguettebox from 'baguettebox.js';
 import About from '@/components/About';
@@ -207,7 +202,7 @@ export default {
 
     vm.setEvents();
     vm.$once(vm.parseSvgList());
-    vm.sizeshards();
+    vm.sizeRocks();
 
     setTimeout(function () {
       var bLazy = new Blazy({ // eslint-disable-line
@@ -221,7 +216,7 @@ export default {
     }
   },
   beforeDestroy: function () {
-    window.removeEventListener('resize', this.sizeshards);
+    window.removeEventListener('resize', this.sizeRocks);
   },
   watch: {
     currentMountain: 'navigate',
@@ -287,9 +282,26 @@ export default {
     },
     animateSvg: function () {
       const vm = this;
+      let delay = 0;
+      let duration = 1000;
       let mountain = vm.svgCurrentMountain;
 
       console.log(mountain);
+
+      mountain.rocks.forEach(function (d) {
+        let selector = '#' + d.id;
+
+        // vm.$el.getElementById(d.id).style.fill = d.fill;
+        let morphing = Animejs({ // eslint-disable-line
+          targets: selector,
+          points: d.value,
+          fill: d.fill,
+          easing: 'easeOutElastic',
+          delay: delay += 10, // stagger
+          duration: duration,
+          loop: false
+        });
+      });
 
       // TODO: fix blanca-traverse paths to polygons
       // TODO: loop through each shard and set points
@@ -305,7 +317,7 @@ export default {
       // });
     },
     setEvents: function () {
-      window.addEventListener('resize', this.sizeshards);
+      window.addEventListener('resize', this.sizeRocks);
       document.onkeydown = this.checkKey;
       // TODO: does vue handle transitionend event?
       this.$el.querySelector('.shooting-star')
@@ -359,7 +371,7 @@ export default {
         });
       }, 0);
     },
-    sizeshards: function () {
+    sizeRocks: function () {
       // NOTE: maintain aspect ration of 5:3
       // calc height & width
       // height = new width * (original height / original width)
@@ -463,13 +475,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
+@import '../assets/scss/_baguetteBox.scss';
 @import '../assets/scss/_variables.scss';
 @import '../assets/scss/_utilities.scss';
-//@import '../assets/scss/_no-clip-path.scss';
 @import '../assets/scss/_earth.scss';
 // @import '../assets/scss/_bugaboo.scss';
 // @import '../assets/scss/_blanca-traverse.scss';
 // @import '../assets/scss/_glacier-peak.scss';
 // @import '../assets/scss/_tetons.scss';
-@import '../assets/scss/_baguetteBox.scss';
 </style>

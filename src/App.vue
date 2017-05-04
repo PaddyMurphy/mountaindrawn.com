@@ -11,9 +11,17 @@ export default {
 </script>
 
 <style lang="scss">
-@import '/assets/scss/_variables.scss';
-@import '/assets/scss/_utilities.scss';
 @import '/assets/scss/_common.scss';
+
+html {
+    box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
 
 body {
   font-family: 'Open Sans Condensed', 'Avenir', Helvetica, sans-serif;
