@@ -1,5 +1,5 @@
 <template>
-  <div class="mountaindrawn" v-bind:class="supportsClipPath">
+  <div class="mountaindrawn">
     <svg style="display: none;">
       <symbol viewBox="0 0 56 49" version="1.1">
         <g id="arrow-left" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -44,10 +44,30 @@
       <div class="mountains-wrapper">
         <div class="mountains" v-bind:style="{ height: mountainHeight + 'px', width: mountainWidth + 'px' }">
 
-          <div v-for="n in 30" class="rock"></div>
+          <svg
+            width="100%"
+            height="100%"
+            :viewBox="svgCurrentMountain.viewBox"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            v-if="svgMountainsData.length"
+            >
+              <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                  <polygon v-if="id === 'earth'" id="earth-outline" fill="#CCE6F1" points="17.8025863 60.0757894 2.8334088 95.9172722 0.741210938 112.623692 10.2806369 164.704173 22.0597875 182.779748 48.5494647 209.860974 65.6242517 220.506497 73.0561523 223.449304 113.957471 235.847656 163.4824 232.924325 194.204371 222.403448 235.914213 191.666597 257.949348 154.136554 263.741211 121.370315 263.229657 103.292792 247.497939 60.2218586 233.571028 42.7753551 203.464071 19.4432373 189.238275 12.3637508 168.178349 4.98238798 125.104364 0.84765625 109.556575 1.56047387 78.08739 11.4990212 55.8146793 22.6002793 40.4642313 33.6820614"></polygon>
+
+                  <polygon v-for="n in svgCurrentMountain.rocks" :id="n.id" :fill="n.fill" :points="n.value"></polygon>
+
+                  <g v-if="id === 'earth'">
+                    <polygon id="nav-1" fill="#68498E" points="137 75.7246094 138.5625 63 144.035156 75.9667969"></polygon>
+                    <polygon id="nav-2" fill="#684A8D" points="84 111.050781 86.0214844 100 89.453125 110.966797"></polygon>
+                    <polygon id="nav-3" fill="#684A8D" points="64.3007812 100.203085 66.033934 91 69.7539062 100.494141"></polygon>
+                    <polygon id="nav-4" fill="#432668" points="82 120.182506 83.528021 111 87.453125 120.494141"></polygon>
+                  </g>
+              </g>
+          </svg>
 
           <!-- earth's mountains -->
-          <mountain-earth-nav
+          <!-- <mountain-earth-nav
             v-for="(mountain, index) in mountains"
             :mountain="mountain"
             :key="mountain.id"
@@ -55,9 +75,7 @@
             :hoverMtnShortcut="hoverMtnShortcut"
             :clickMtnShortcut="clickMtnShortcut"
           >
-          </mountain-earth-nav>
-
-          <div class="earth-outline"></div>
+          </mountain-earth-nav> -->
         </div>
 
         <!-- no clip-path support -->
@@ -135,7 +153,7 @@
 
 <script>
 import mountaindata from '../mountaindata.json';
-import supports from '../test-clip-path.js';
+import Animejs from 'animejs'; // eslint-disable-line
 import Blazy from 'bLazy';
 import Baguettebox from 'baguettebox.js';
 import About from '@/components/About';
@@ -157,6 +175,13 @@ export default {
       mountainHeight: 500,
       mountains: mountaindata.mountains,
       mountainWidth: 500,
+      svgMountains: [
+        require('!!raw-loader!../assets/images/earth.svg'),
+        require('!!raw-loader!../assets/images/bugaboo.svg'),
+        require('!!raw-loader!../assets/images/tetons.svg'),
+        require('!!raw-loader!../assets/images/blanca-traverse.svg')
+      ],
+      svgMountainsData: [], // extracted points & fill
       photos: null,
       prominence: null,
       showData: false,
@@ -164,7 +189,6 @@ export default {
       starLeft: null,
       starTop: null,
       starWidth: null,
-      supportsClipPath: 'no-clip-path',
       title: null
     }
   },
@@ -175,13 +199,15 @@ export default {
     'mountain-earth-nav': MountainEarthNav
   },
   mounted: function () {
+    var vm = this;
     // navigate to bookmarked url
-    if (this.$route.name === 'MountainUrl') {
-      this.currentMountain = this.mountains.findIndex(this.returnIndex);
+    if (vm.$route.name === 'MountainUrl') {
+      vm.currentMountain = vm.mountains.findIndex(vm.returnIndex);
     }
 
-    this.sizeshards();
-    this.setEvents();
+    vm.setEvents();
+    vm.$once(vm.parseSvgList());
+    vm.sizeshards();
 
     setTimeout(function () {
       var bLazy = new Blazy({ // eslint-disable-line
@@ -191,20 +217,20 @@ export default {
 
     // init earth sequence
     if (document.body.dataset.mountain === 'earth') {
-      this.earthSequence();
-    }
-    // test for clip-path support
-    if (supports.areClipPathShapesSupported()) {
-      this.supportsClipPath = 'supports-clip-path';
+      vm.earthSequence();
     }
   },
   beforeDestroy: function () {
     window.removeEventListener('resize', this.sizeshards);
   },
   watch: {
-    currentMountain: 'navigate'
+    currentMountain: 'navigate',
+    id: 'animateSvg'
   },
   computed: {
+    svgCurrentMountain: function () {
+      return this.svgMountainsData[this.currentMountain];
+    },
     nextMountainIndex: function () {
       return (this.currentMountain === this.length) ? 0 : (this.currentMountain + 1);
     },
@@ -219,6 +245,65 @@ export default {
     }
   },
   methods: {
+    parseSvgList: function () {
+      var vm = this;
+
+      vm.svgMountains.forEach(function (d, i) {
+        vm.parseSvg(i);
+      })
+    },
+    parseSvg: function (number) {
+      // parse svg to grab polygon points and fill
+      var vm = this;
+      var polygon;
+      // https://developer.mozilla.org/en-US/docs/Web/API/DOMParser
+      var parser = new DOMParser();
+      var svg = parser.parseFromString(vm.svgMountains[number], 'image/svg+xml');
+      // select polygons that have id with "shard-"
+      var polygons = svg.querySelectorAll('polygon[id*="shard-"]');
+      // create mountain object to save
+      var mountain = {
+        id: svg.querySelector('svg').id,
+        viewBox: svg.querySelector('svg').getAttribute('viewBox'),
+        rocks: [] // contains points, id, and fill
+      }
+
+      // get points, id, and fill (and viewBox?)
+      // create object and push to svgMountainsData
+      polygons.forEach(function (d, i) {
+        // create polygon
+        polygon = {
+          value: d.getAttribute('points'),
+          fill: d.getAttribute('fill'),
+          id: d.getAttribute('id')
+        }
+
+        mountain.rocks.push(polygon);
+      });
+
+      if (mountain) {
+        vm.svgMountainsData.push(mountain);
+      }
+    },
+    animateSvg: function () {
+      const vm = this;
+      let mountain = vm.svgCurrentMountain;
+
+      console.log(mountain);
+
+      // TODO: fix blanca-traverse paths to polygons
+      // TODO: loop through each shard and set points
+      // var morphing = Animejs({ // eslint-disable-line
+      //   targets: 'polygon[id*="shard-"]',
+      //   points: mountain.rocks,
+      //   easing: 'easeOutQuad',
+      //   duration: 2000,
+      //   loop: false,
+      //   run: function (anim) {
+      //     console.log('anim');
+      //   }
+      // });
+    },
     setEvents: function () {
       window.addEventListener('resize', this.sizeshards);
       document.onkeydown = this.checkKey;
@@ -241,13 +326,6 @@ export default {
       this.photos = this.mountains[this.currentMountain].photos;
 
       this.setData();
-
-      // console.log(this.$router);
-      // update url
-      // this.$router.push({
-      //   name: 'MountainUrl',
-      //   params: {'mountain': mountainId}
-      // });
     },
     returnIndex: function (el) {
       return el.id === this.$route.params.mountain;
@@ -387,11 +465,11 @@ export default {
 <style lang="scss">
 @import '../assets/scss/_variables.scss';
 @import '../assets/scss/_utilities.scss';
-@import '../assets/scss/_no-clip-path.scss';
+//@import '../assets/scss/_no-clip-path.scss';
 @import '../assets/scss/_earth.scss';
-@import '../assets/scss/_bugaboo.scss';
-@import '../assets/scss/_blanca-traverse.scss';
-@import '../assets/scss/_glacier-peak.scss';
-@import '../assets/scss/_tetons.scss';
+// @import '../assets/scss/_bugaboo.scss';
+// @import '../assets/scss/_blanca-traverse.scss';
+// @import '../assets/scss/_glacier-peak.scss';
+// @import '../assets/scss/_tetons.scss';
 @import '../assets/scss/_baguetteBox.scss';
 </style>

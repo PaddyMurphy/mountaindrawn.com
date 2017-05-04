@@ -1,5 +1,5 @@
 
-<svg width="100%" height="100%" viewBox="0 0 500 300" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg id="bugaboo" width="100%" height="100%" viewBox="0 0 500 300" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <g id="mountain" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <polygon id="shard-1" fill="#E5DED9" points="225.355469 35.9257812 236.003906 44.8339844 231.189453 74.0039062"></polygon>
         <polygon id="shard-2" fill="#C1B8AE" points="246.516602 47.7265625 267.601562 63.6699219 277.662109 169.519043 253.988281 87.6191406"></polygon>
