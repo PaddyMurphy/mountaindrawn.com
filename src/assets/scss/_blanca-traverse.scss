@@ -8,14 +8,11 @@ body[data-mountain="blanca-traverse"] {
 		color: black;
 	}
 
-	// .mountains {
-	// 	background-image:
-	// 	    radial-gradient(
-	// 	      circle closest-side at 58% 40%,
-	// 	      #FFDE7F,
-	// 	      rgba(255,222,127,0.001) // safari transparent fix
-	// 	    );
-	// }
+	polygon[id*="shard-"] {
+		display: block;
+		position: absolute;
+		z-index: 10;
+	}
 
 	.content {
 		h2 {
