@@ -256,16 +256,16 @@ export default {
       })
     },
     parseSvg: function (number) {
+      let polygon;
       // parse svg to grab polygon points and fill
-      var vm = this;
-      var polygon;
+      const vm = this;
       // https://developer.mozilla.org/en-US/docs/Web/API/DOMParser
-      var parser = new DOMParser();
-      var svg = parser.parseFromString(vm.svgMountains[number], 'image/svg+xml');
+      const parser = new DOMParser();
+      const svg = parser.parseFromString(vm.svgMountains[number], 'image/svg+xml');
       // select polygons that have id with "shard-"
-      var polygons = svg.querySelectorAll('polygon[id*="shard-"]');
+      const polygons = svg.querySelectorAll('polygon[id*="shard-"]');
       // create mountain object to save
-      var mountain = {
+      const mountain = {
         id: svg.querySelector('svg').id,
         viewBox: svg.querySelector('svg').getAttribute('viewBox'),
         rocks: [] // contains points, id, and fill
@@ -293,30 +293,30 @@ export default {
     animateSvg: function () {
       const vm = this;
       let delay = 0;
-      let duration = 1100;
+      let duration = 2000;
+      let stagger = 10;
       let mountain = vm.svgCurrentMountain;
-
-      console.log(mountain);
+      let anime = Animejs.timeline();
 
       mountain.rocks.forEach(function (d) {
         let selector = '#' + d.id;
 
-        // vm.$el.getElementById(d.id).style.fill = d.fill;
-        let morphing = Animejs({ // eslint-disable-line
-          targets: selector,
-          points: d.value,
-          fill: d.fill,
-          easing: 'easeOutElastic',
-          delay: delay += 10, // stagger
+        anime.add({
+          delay: delay += stagger,
           duration: duration,
-          loop: false
+          easing: 'easeOutElastic',
+          elasticity: 200,
+          fill: d.fill,
+          offset: -100 + stagger,
+          points: d.value,
+          targets: selector
         });
       });
     },
     setEvents: function () {
       window.addEventListener('resize', this.sizeRocks);
       document.onkeydown = this.checkKey;
-      // TODO: does vue handle transitionend event?
+      // TODO: vue handles transitionend event
       this.$el.querySelector('.shooting-star')
         .addEventListener('transitionend', this.shootingStarEnd, false);
     },
@@ -412,7 +412,7 @@ export default {
       // reset the mountain shortcuts
       // mtnShortcutReset();
       // only execute once - occurs on /#/earth bookmarked route
-      var that = this;
+      var vm = this;
 
       if (this.earthStarted) {
         return;
@@ -422,9 +422,9 @@ export default {
       (function loop () {
         // activate shooting star at random interval
         setTimeout(function () {
-          that.animateShootingStar();
+          vm.animateShootingStar();
           loop();
-        }, that.getRandomInRange(5000, 12000));
+        }, vm.getRandomInRange(5000, 12000));
       }());
 
       this.earthStarted = true;
