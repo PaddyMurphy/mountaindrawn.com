@@ -110,6 +110,7 @@ h3 {
 }
 
 .nav-earth {
+	// TODO: use svg
 	@extend .earth-clip-path;
 	background: rgba(0, 0, 0, 0.2);
 	width: 27px;
@@ -221,6 +222,11 @@ h3 {
 	align-items: center;
 	justify-content: center;
 	margin: 0 auto;
+
+	svg {
+		overflow: visible;
+		z-index: 1;
+	}
 }
 
 // Main content

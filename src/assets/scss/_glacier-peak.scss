@@ -11,15 +11,6 @@ body[data-mountain="glacier-peak"] {
 		text-align: center;
 	}
 
-	.mountains {
-		background-image:
-		    radial-gradient(
-		      circle closest-side at 58% 40%,
-		      #FFDE7F,
-		      rgba(255,222,127,0.001) // safari transparent fix
-		    );
-	}
-
 	.content {
 		h2 {
 			color: #fff;
