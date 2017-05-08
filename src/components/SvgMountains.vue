@@ -34,7 +34,7 @@
             <!-- display intially and then let js change values -->
             <polygon v-once v-for="n in svgCurrentMountain.rocks" :id="n.id" :fill="n.fill" :points="n.value"></polygon>
 
-            <g v-if="id === 'earth'">
+            <g v-if="id === 'earth'" class="svg-nav">
               <polygon id="nav-bugaboo" fill="#68498E" points="137 75.7246094 138.5625 63 144.035156 75.9667969"></polygon>
               <polygon id="nav-tetons" fill="#684A8D" points="84 111.050781 86.0214844 100 89.453125 110.966797"></polygon>
               <polygon id="nav-glacier-peak" fill="#684A8D" points="64.3007812 100.203085 66.033934 91 69.7539062 100.494141"></polygon>
@@ -46,6 +46,9 @@
 </template>
 
 <script>
+// NOTE: tried using gsap with morphSvg plugin
+//       but it requires a paid membership
+// Animejs seems to be the only other library that animates polygons
 import Animejs from 'animejs';
 
 export default {
@@ -140,8 +143,8 @@ export default {
     animateSvg: function () {
       const vm = this;
       let delay = 0;
-      let duration = 2000;
-      let stagger = 10;
+      let duration = 2500;
+      let stagger = 33;
       let mountain = vm.svgCurrentMountain;
       let anime = Animejs.timeline();
 
@@ -152,7 +155,7 @@ export default {
           delay: delay += stagger,
           duration: duration,
           easing: 'easeOutElastic',
-          elasticity: 200,
+          elasticity: 100,
           fill: d.fill,
           offset: -100 + stagger,
           points: d.value,

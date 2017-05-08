@@ -145,11 +145,11 @@ body[data-mountain="earth"] {
 	}
 
 	#earth-outline {
-		box-shadow: 0 0 10px rgba(0,186,255,0.5);
-		animation: earth-grow 600ms;
+		// box-shadow: 0 0 10px rgba(0,186,255,0.5);
+		// animation: earth-grow 600ms;
 		transform-origin: center;
-		animation-fill-mode: forwards;
-		animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55); // bounce
+		// animation-fill-mode: forwards;
+		// animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55); // bounce
 	}
 
 	// data box position
@@ -162,27 +162,25 @@ body[data-mountain="earth"] {
 		}
 	}
 
-	.earth-mtn {
-		// show mountains
-		display: block;
-		visibility: visible;
-		// style
-		background-color: $earth-mountain;
-		//background: linear-gradient(to right, rgba(116,70,144,1) 30%,rgba(230,221,236,1) 50%,rgba(116,70,144,1) 100%);
-		cursor: pointer;
-		position: absolute;
-		transition: all 0.3s;
-		width: 100%;
-		height: 100%;
-		z-index: 9;
-		&.hover {
-			background-color: darken($earth-mountain, 15%);
-		}
-		// snow effect to indicate clickable
-	}
+	// .earth-mtn {
+	// 	// show mountains
+	// 	display: block;
+	// 	visibility: visible;
+	// 	// style
+	// 	background-color: $earth-mountain;
+	// 	//background: linear-gradient(to right, rgba(116,70,144,1) 30%,rgba(230,221,236,1) 50%,rgba(116,70,144,1) 100%);
+	// 	cursor: pointer;
+	// 	position: absolute;
+	// 	transition: all 0.3s;
+	// 	width: 100%;
+	// 	height: 100%;
+	// 	z-index: 9;
+	// 	&.hover {
+	// 		background-color: darken($earth-mountain, 15%);
+	// 	}
+	// }
 
 	///*** STARFIELD ***///
-
 	// n is number of stars required
 	@function box-shadows($n) {
 		$value: '#{random(1500)}px #{random(1500)}px #FFF';
@@ -226,7 +224,7 @@ body[data-mountain="earth"] {
 		}
 
 		&:before {
-			animation: earth-shine-in 20s infinite;
+			animation: 20s earth-shine-in 3s infinite;
 			opacity: 0;
 			background: linear-gradient(
 				to left top,
@@ -242,7 +240,7 @@ body[data-mountain="earth"] {
 		}
 
 		&:after {
-			animation: earth-shine-out 20s infinite;
+			animation: 20s earth-shine-out 3s infinite;
 			opacity: 1;
 			background: linear-gradient(
 				to left top,
@@ -264,7 +262,7 @@ body[data-mountain="earth"] {
 	}
 
 	.starfield-1 {
-	    animation: starfield 200s linear infinite;
+	    animation: starfield 200s linear 2s infinite;
 	    box-shadow: $shadows-small;
 	    height: 1px;
 	    opacity: 0.5;
@@ -273,7 +271,7 @@ body[data-mountain="earth"] {
 	}
 
 	.starfield-2 {
-	    animation: starfield 150s linear infinite;
+	    animation: starfield 150s linear 2s infinite;
 	    box-shadow: $shadows-medium;
 	    height: 2px;
 	    opacity: 0.7;
@@ -281,7 +279,7 @@ body[data-mountain="earth"] {
 	}
 
 	.starfield-3 {
-	    animation: starfield 100s linear infinite;
+	    animation: starfield 100s linear 2s infinite;
 	    box-shadow: $shadows-big;
 	    height: 3px;
 	    opacity: 0.8;
@@ -356,7 +354,7 @@ body[data-mountain="earth"] {
 	// shared styles
 	.earth-satellite {
 		@extend .psuedo-element;
-		animation: satellite-path 30s linear infinite;
+		animation: satellite-path 30s linear 2s infinite;
 		animation-delay: 1s;
 		background-color: rgba(255, 255, 255, 0.8);
 		// TODO: test this
@@ -365,7 +363,7 @@ body[data-mountain="earth"] {
 		width: 1px;
 
 		&:after {
-			animation: satellite-blink 1200ms infinite;
+			animation: satellite-blink 1200ms 2s infinite;
 			background-color: red;
 			display: block;
 			content: '';
