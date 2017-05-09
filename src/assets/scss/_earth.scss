@@ -129,15 +129,6 @@ body[data-mountain="earth"] {
 		}
 	}
 
-	@keyframes earth-grow {
-	    0% {
-	        transform: scale(0.1);
-	    }
-	    100% {
-	        transform: scale(1);
-	    }
-	}
-
 	@keyframes earthshine {
 	  1%   { fill: rgba(0,186,255,0.5); }
 	  50%  { fill: #ff6306; }
@@ -145,11 +136,7 @@ body[data-mountain="earth"] {
 	}
 
 	#earth-outline {
-		// box-shadow: 0 0 10px rgba(0,186,255,0.5);
-		// animation: earth-grow 600ms;
 		transform-origin: center;
-		// animation-fill-mode: forwards;
-		// animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55); // bounce
 	}
 
 	// data box position
@@ -257,7 +244,6 @@ body[data-mountain="earth"] {
 
 	.starfield {
 		display: block;
-		transition: all 0.8s;
 		z-index: 1;
 	}
 
@@ -310,16 +296,16 @@ body[data-mountain="earth"] {
 		top: 0;
 		left: 0;
 		width: 200px;
-    // do not transition visibility
-    transition: opacity 0.8s, transform 0.8s;
-    transform: rotate(45deg) translate(0);
-    visibility: hidden;
+	    // do not transition visibility
+	    transition: opacity 0.8s, transform 0.8s;
+	    transform: rotate(45deg) translate(0);
+	    visibility: hidden;
 
-    &.animate {
-      opacity: 0;
-      transform: rotate(45deg) translate(50vw);
-      visibility: visible;
-    }
+	    &.animate {
+	      opacity: 0;
+	      transform: rotate(45deg) translate(50vw);
+	      visibility: visible;
+	    }
 	}
 
 	// SATELLITES

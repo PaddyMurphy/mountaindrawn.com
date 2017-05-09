@@ -12,7 +12,7 @@
       >
 
       <defs>
-        <filter id="earthShine" height="300%" width="300%" x="-75%" y="-75%">
+        <filter id="earthShine" height="200%" width="200%" x="-75%" y="-75%">
           <!-- Thicken out the original shape -->
           <feMorphology operator="dilate" radius="4" in="SourceAlpha" result="thicken" />
           <!-- Use a gaussian blur to create the soft blurriness of the glow -->
@@ -35,10 +35,18 @@
             <polygon v-once v-for="n in svgCurrentMountain.rocks" :id="n.id" :fill="n.fill" :points="n.value"></polygon>
 
             <g v-if="id === 'earth'" class="svg-nav">
-              <polygon id="nav-bugaboo" fill="#68498E" points="137 75.7246094 138.5625 63 144.035156 75.9667969"></polygon>
-              <polygon id="nav-tetons" fill="#684A8D" points="84 111.050781 86.0214844 100 89.453125 110.966797"></polygon>
-              <polygon id="nav-glacier-peak" fill="#684A8D" points="64.3007812 100.203085 66.033934 91 69.7539062 100.494141"></polygon>
-              <polygon id="nav-blanca-traverse" fill="#432668" points="82 120.182506 83.528021 111 87.453125 120.494141"></polygon>
+              <a href="#"
+              class="earth-mtn"
+              @click.prevent="navigate(1)"
+              @mouseover="hoverMtnShortcut">
+                <polygon data-index="1" id="nav-bugaboo" fill="#68498E" points="137 75.7246094 138.5625 63 144.035156 75.9667969"></polygon>
+              </a>
+              <a href="#" class="earth-mtn" @click.prevent="navigate(2)">
+                <polygon id="nav-tetons" fill="#684A8D" points="84 111.050781 86.0214844 100 89.453125 110.966797"></polygon>
+              </a>
+              <a href="#" class="earth-mtn" @click.prevent="navigate(3)">
+                <polygon id="nav-blanca-traverse" fill="#432668" points="82 120.182506 83.528021 111 87.453125 120.494141"></polygon>
+              </a>
             </g>
         </g>
     </svg>
@@ -49,6 +57,7 @@
 // NOTE: tried using gsap with morphSvg plugin
 //       but it requires a paid membership
 // Animejs seems to be the only other library that animates polygons
+import MountainEarthNav from '@/components/MountainEarthNav'
 import Animejs from 'animejs';
 
 export default {
@@ -61,7 +70,14 @@ export default {
     currentMountain: {
       type: Number,
       required: true
+    },
+    earthMtnActive: {
+      type: Number,
+      required: false
     }
+  },
+  components: {
+    'mountains-nav': MountainEarthNav
   },
   data () {
     return {
@@ -73,7 +89,8 @@ export default {
         require('!!raw-loader!../assets/images/tetons.svg'),
         require('!!raw-loader!../assets/images/blanca-traverse.svg')
       ],
-      svgMountainsData: [] // extracted points & fill
+      svgMountainsData: [], // extracted points & fill
+      svgNavData: [] // extracted points & fill
     }
   },
   computed: {
@@ -88,6 +105,7 @@ export default {
     const vm = this;
 
     vm.$once(vm.parseSvgList());
+    // vm.$once(vm.createNav());
     vm.sizeRocks();
     vm.setEvents();
   },
@@ -97,6 +115,12 @@ export default {
   methods: {
     setEvents: function () {
       window.addEventListener('resize', this.sizeRocks);
+    },
+    navigate: function (mountain) {
+      this.$emit('navigate', mountain)
+    },
+    hover: function (mountain) {
+      this.$emit('hover', mountain)
     },
     parseSvgList: function () {
       const vm = this;
@@ -140,6 +164,43 @@ export default {
 
       return mountain;
     },
+    createNav: function () {
+      // TODO: dry this up
+      let polygon;
+      // parse svg to grab polygon points and fill
+      const vm = this;
+      // https://developer.mozilla.org/en-US/docs/Web/API/DOMParser
+      const parser = new DOMParser();
+      // parse earth only
+      const svg = parser.parseFromString(vm.svgMountains[0], 'image/svg+xml');
+      // select polygons that have id with "shard-"
+      const polygons = svg.querySelectorAll('polygon[id*="nav-"]');
+      // create mountain object to save
+      const mountain = {
+        id: svg.querySelector('svg').id,
+        rocks: [] // contains points, id, and fill
+      }
+
+      // get points, id, and fill (and viewBox?)
+      // create object and push to svgMountainsData
+      // TODO: convert passing index of mountains to id
+      polygons.forEach(function (d, i) {
+        // create polygon
+        polygon = {
+          value: d.getAttribute('points'),
+          fill: d.getAttribute('fill'),
+          id: d.getAttribute('id')
+        }
+
+        mountain.rocks.push(polygon);
+      });
+
+      if (mountain) {
+        vm.svgNavData.push(mountain);
+      }
+
+      return mountain;
+    },
     animateSvg: function () {
       const vm = this;
       let delay = 0;
@@ -159,7 +220,10 @@ export default {
           fill: d.fill,
           offset: -100 + stagger,
           points: d.value,
-          targets: selector
+          targets: selector,
+          complete: function (anim) {
+            // console.log(anim.completed);
+          }
         });
       });
     },
@@ -183,6 +247,27 @@ export default {
 
       this.mountainWidth = w;
       this.mountainHeight = h;
+    },
+    hoverMtnShortcut: function (e) {
+      // set active icon
+      let active = parseInt(e.target.dataset.index, 10);
+
+      this.$emit('setEarthMtnActive', active)
+
+      // keep selected until another icon is hovered
+      this.mtnShortcutReset();
+      e.target.classList.add('hover');
+    },
+    mtnShortcutReset: function () {
+      var earthMountains = this.$el.querySelectorAll('.earth-mtn');
+      // remove hover class from icons
+      earthMountains.forEach(function (mtn) {
+        mtn.classList.remove('hover');
+      });
+    },
+    clickMtnShortcut: function (mountain) {
+      // @mountain (required) for clicking icons
+      this.currentMountain = parseInt(mountain.target.dataset.index, 10);
     }
   }
 }

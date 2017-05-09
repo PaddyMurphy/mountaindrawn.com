@@ -15,6 +15,7 @@
     "baguettebox.js": "^1.8.2",
     "blazy": "^1.8.2",
     "gsap": "^1.19.1",
+    "lodash": "^4.17.4",
     "vue": "^2.2.6",
     "vue-router": "^2.3.0"
   },

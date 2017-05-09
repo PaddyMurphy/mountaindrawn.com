@@ -33,8 +33,8 @@
 
         <router-link
           class="nav-arrow nav-right"
-          :to="previousMountainId"
-          @click.native="setCurrentMountain(previousMountainIndex)">
+          :to="nextMountainId"
+          @click.native="setCurrentMountain(nextMountainIndex)">
           <svg class="arrow-right" viewBox="0 0 56 49">
             <use xlink:href="#arrow-left" />
           </svg>
@@ -43,7 +43,12 @@
 
       <div class="mountains-wrapper">
 
-        <svg-mountains :id="id" :currentMountain="currentMountain" />
+        <svg-mountains
+          :id="id"
+          :currentMountain="currentMountain"
+          :earthMtnActive="earthMtnActive"
+          v-on:navigate="setCurrentMountain"
+        />
 
         <div class="data" :class="{transparent: !photos}" @click="clickData">
           <div class="data-content">
@@ -114,6 +119,7 @@
 </template>
 
 <script>
+import _ from 'lodash';
 import mountaindata from '../mountaindata.json';
 import Blazy from 'bLazy';
 import Baguettebox from 'baguettebox.js';
@@ -130,13 +136,13 @@ export default {
       currentMountain: 0,
       description: null,
       earthMtnActive: null,
-      earthStarted: false,
       elevation: null,
       id: 'earth',
       length: mountaindata.mountains.length - 1,
       mountains: mountaindata.mountains,
       photos: null,
       prominence: null,
+      shootingStarTimeout: undefined,
       showData: false,
       showShootingStar: false,
       starLeft: null,
@@ -152,11 +158,18 @@ export default {
     'mountain-photo-nav': MountainPhotoNav,
     'mountain-earth-nav': MountainEarthNav
   },
-  mounted: function () {
+  mounted () {
     var vm = this;
+
     // navigate to bookmarked url
     if (vm.$route.name === 'MountainUrl') {
       vm.currentMountain = vm.mountains.findIndex(vm.returnIndex);
+    }
+
+    // init earth sequence
+    if (vm.$route.path === ('/') ||
+        vm.$route.path === ('/earth')) {
+      vm.earthSequence();
     }
 
     vm.setEvents();
@@ -166,14 +179,20 @@ export default {
         offset: -70
       });
     }, 1000);
-
-    // init earth sequence
-    if (document.body.dataset.mountain === 'earth') {
-      vm.earthSequence();
-    }
   },
   watch: {
-    currentMountain: 'navigate'
+    currentMountain: 'navigate',
+    '$route' (to, from) {
+      const vm = this;
+      // enable earth sequence
+      if (from.path === '/' || from.path === '/earth') {
+        vm.clearStarTimeout();
+      }
+      // disable earth sequence
+      if (to.path === '/' || to.path === '/earth') {
+        vm.earthSequence();
+      }
+    }
   },
   computed: {
     svgCurrentMountain: function () {
@@ -195,7 +214,7 @@ export default {
   methods: {
     setEvents: function () {
       // window.addEventListener('resize', this.sizeRocks);
-      document.onkeydown = this.checkKey;
+      document.onkeydown = _.debounce(this.checkKey, 500);
       // TODO: vue handles transitionend event
       this.$el.querySelector('.shooting-star')
         .addEventListener('transitionend', this.shootingStarEnd, false);
@@ -219,7 +238,7 @@ export default {
     returnIndex: function (el) {
       return el.id === this.$route.params.mountain;
     },
-    setCurrentMountain: function (index) {
+    setCurrentMountain: _.debounce(function (index) {
       // @index (string or number)
       // TODO: convert all params to index or id
       if (typeof (index) === 'string') {
@@ -227,7 +246,7 @@ export default {
       } else {
         this.currentMountain = index;
       }
-    },
+    }, 300),
     setData: function (id) {
       // @id (optional) pass in mountain or use currentMountain
       var mountain = this.mountains[id] || this.mountains[this.currentMountain];
@@ -268,46 +287,24 @@ export default {
       this.currentMountain = 0;
     },
     earthSequence: function () {
+      var vm = this;
       // reset the mountain shortcuts
       // mtnShortcutReset();
-      // only execute once - occurs on /#/earth bookmarked route
-      var vm = this;
 
-      if (this.earthStarted) {
-        return;
-      }
       // animate the shooting star
       // NOTE: ensure timing exceeds transition timing
       (function loop () {
         // activate shooting star at random interval
-        setTimeout(function () {
+        vm.shootingStarTimeout = window.setTimeout(function () {
           vm.animateShootingStar();
           loop();
         }, vm.getRandomInRange(5000, 12000));
       }());
-
-      this.earthStarted = true;
     },
-    hoverMtnShortcut: function (e) {
-      // set active icon
-      this.earthMtnActive = parseInt(e.target.dataset.index, 10);
-      this.photos = this.mountains[this.earthMtnActive].photos;
-      // show mountain info on hover
-      this.setData(this.earthMtnActive);
-      // keep selected until another icon is hovered
-      this.mtnShortcutReset();
-      e.target.classList.add('hover');
-    },
-    mtnShortcutReset: function () {
-      var earthMountains = this.$el.querySelectorAll('.earth-mtn');
-      // remove hover class from icons
-      earthMountains.forEach(function (mtn) {
-        mtn.classList.remove('hover');
-      });
-    },
-    clickMtnShortcut: function (mountain) {
-      // @mountain (required) for clicking icons
-      this.currentMountain = parseInt(mountain.target.dataset.index, 10);
+    clearStarTimeout: function () {
+      if (this.shootingStarTimeout) {
+        window.clearTimeout(this.shootingStarTimeout);
+      }
     },
     clickData: function () {
       // only click if earth
