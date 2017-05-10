@@ -38,11 +38,10 @@
               <!-- NOTE: using router-link prevents display -->
               <a href=""
                 v-for="svg in svgNavData"
-                class="earth-mtn"
                 :key="svg.name"
                 @click.prevent="navigate(svg.name)"
                 @mouseover="hoverMtnShortcut">
-                  <polygon :data-index="svg.index" :class="svg.class" :fill="svg.fill" :points="svg.value">dsfas</polygon>
+                  <polygon :data-index="svg.index" class="earth-mtn" :class="svg.class" :fill="svg.fill" :points="svg.value"></polygon>
               </a>
 
             </g>
@@ -55,7 +54,6 @@
 // NOTE: tried using gsap with morphSvg plugin
 //       but it requires a paid membership
 // Animejs seems to be the only other library that animates polygons
-// import MountainEarthNav from '@/components/MountainEarthNav'
 import mountaindata from '../mountaindata.json';
 import Animejs from 'animejs';
 
@@ -70,14 +68,10 @@ export default {
       type: Number,
       required: true
     }
-    // earthMtnActive: {
-    //   type: Number,
-    //   required: false
-    // }
   },
   data () {
     return {
-      earthMtnActive: null,
+      earthMtnActive: undefined,
       mountainHeight: 500,
       mountainWidth: 500,
       mountains: mountaindata.mountains,
@@ -211,6 +205,10 @@ export default {
       let mountain = vm.svgCurrentMountain;
       let anime = Animejs.timeline();
 
+      if (mountain.id === 'earth') {
+        this.mtnShortcutReset();
+      }
+
       mountain.rocks.forEach(function (d) {
         let selector = '#' + d.id;
 
@@ -251,7 +249,7 @@ export default {
       this.mountainHeight = h;
     },
     mtnShortcutReset: function () {
-      var earthMountains = this.$el.querySelectorAll('.earth-mtn');
+      const earthMountains = this.$el.querySelectorAll('.earth-mtn');
       // remove hover class from icons
       earthMountains.forEach(function (mtn) {
         mtn.classList.remove('hover');
@@ -277,5 +275,33 @@ export default {
   svg {
     overflow: visible;
     z-index: 1;
+  }
+
+  .earth-mtn {
+    animation: earth-mtn-out 0.2s ease-in forwards;
+    transform-origin: center;
+  }
+
+  .earth-mtn.hover {
+    animation: earth-mtn-hover 0.3s ease-out forwards;
+  }
+
+  @keyframes earth-mtn-out {
+      0% {
+        transform: scale(1.4);
+      }
+      100% {
+        transform: scale(1);
+      }
+  }
+
+  @keyframes earth-mtn-hover {
+      0% {
+        transform: scale(1);
+      }
+      100% {
+        transform: scale(1.4);
+        fill: #37264B;
+      }
   }
 </style>
