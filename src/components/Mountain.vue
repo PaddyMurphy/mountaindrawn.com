@@ -18,8 +18,7 @@
 
         <router-link
           class="nav-arrow nav-left"
-          :to="previousMountainId"
-          @click.native="setCurrentMountain(previousMountainIndex)">
+          :to="previousMountainId">
           <svg class="arrow-left" viewBox="0 0 56 49">
             <use xlink:href="#arrow-left" />
           </svg>
@@ -33,8 +32,7 @@
 
         <router-link
           class="nav-arrow nav-right"
-          :to="nextMountainId"
-          @click.native="setCurrentMountain(nextMountainIndex)">
+          :to="nextMountainId">
           <svg class="arrow-right" viewBox="0 0 56 49">
             <use xlink:href="#arrow-left" />
           </svg>
@@ -46,8 +44,7 @@
         <svg-mountains
           :id="id"
           :currentMountain="currentMountain"
-          :earthMtnActive="earthMtnActive"
-          v-on:navigate="setCurrentMountain"
+          v-on:setEarthMtnActive="setEarthMtnActive"
         />
 
         <div class="data" :class="{transparent: !photos}" @click="clickData">
@@ -119,6 +116,7 @@
 </template>
 
 <script>
+// TODO: only using debounce so far - should remove or limit
 import _ from 'lodash';
 import mountaindata from '../mountaindata.json';
 import Blazy from 'bLazy';
@@ -126,37 +124,36 @@ import Baguettebox from 'baguettebox.js';
 import About from '@/components/About';
 import SvgMountains from '@/components/SvgMountains';
 import Photos from '@/components/Photos';
-import MountainEarthNav from '@/components/MountainEarthNav';
 import MountainPhotoNav from '@/components/MountainPhotoNav';
 
 export default {
+
   name: 'mountain',
   data () {
     return {
       currentMountain: 0,
-      description: null,
-      earthMtnActive: null,
-      elevation: null,
+      description: undefined,
+      earthMtnActive: undefined,
+      elevation: undefined,
       id: 'earth',
       length: mountaindata.mountains.length - 1,
       mountains: mountaindata.mountains,
-      photos: null,
-      prominence: null,
+      photos: undefined,
+      prominence: undefined,
       shootingStarTimeout: undefined,
       showData: false,
       showShootingStar: false,
-      starLeft: null,
-      starTop: null,
-      starWidth: null,
-      title: null
+      starLeft: undefined,
+      starTop: undefined,
+      starWidth: undefined,
+      title: undefined
     }
   },
   components: {
     'about': About,
     'svg-mountains': SvgMountains,
     'photos': Photos,
-    'mountain-photo-nav': MountainPhotoNav,
-    'mountain-earth-nav': MountainEarthNav
+    'mountain-photo-nav': MountainPhotoNav
   },
   mounted () {
     var vm = this;
@@ -184,6 +181,8 @@ export default {
     currentMountain: 'navigate',
     '$route' (to, from) {
       const vm = this;
+      // navigate by setting mountain
+      vm.setCurrentMountain(to.params.mountain);
       // enable earth sequence
       if (from.path === '/' || from.path === '/earth') {
         vm.clearStarTimeout();
@@ -195,9 +194,6 @@ export default {
     }
   },
   computed: {
-    svgCurrentMountain: function () {
-      return this.svgMountainsData[this.currentMountain];
-    },
     nextMountainIndex: function () {
       return (this.currentMountain === this.length) ? 0 : (this.currentMountain + 1);
     },
@@ -229,13 +225,14 @@ export default {
     },
     navigate: function () {
       var mountainId = this.mountains[this.currentMountain].id;
+
       // get id and set to body dataset
       document.body.dataset.mountain = mountainId;
-      this.photos = this.mountains[this.currentMountain].photos;
 
       this.setData();
     },
     returnIndex: function (el) {
+      // find index from route mountain param
       return el.id === this.$route.params.mountain;
     },
     setCurrentMountain: _.debounce(function (index) {
@@ -247,20 +244,29 @@ export default {
         this.currentMountain = index;
       }
     }, 300),
+    findMountainIndex: function (name) {
+      // @requires name (string)
+      return this.mountains.findIndex(function (o) {
+        return o.id === name;
+      });
+    },
     setData: function (id) {
+      var vm = this;
       // @id (optional) pass in mountain or use currentMountain
+      // used to navigate and set photos
       var mountain = this.mountains[id] || this.mountains[this.currentMountain];
+
       // set title, description, elevation, & prominence
       this.title = mountain.title;
       this.description = mountain.description;
       this.elevation = mountain.elevation;
       this.id = mountain.id;
       this.prominence = mountain.prominence;
-
+      this.photos = this.mountains[vm.findMountainIndex(mountain.id)].photos;
       this.setupPhotoGallery();
     },
     setupPhotoGallery: function () {
-      // TODO: should only init once. add default photos
+      // TODO: should only init once.
       setTimeout(function () {
         Baguettebox.run('.data-photos', {
           fullScreen: false
@@ -306,8 +312,13 @@ export default {
         window.clearTimeout(this.shootingStarTimeout);
       }
     },
+    setEarthMtnActive: function (active) {
+      this.earthMtnActive = active;
+      this.setData(active);
+    },
     clickData: function () {
       // only click if earth
+      // TODO: earthMtnActive is in svgMountains
       if (this.currentMountain === 0) {
         this.currentMountain = this.earthMtnActive;
       }

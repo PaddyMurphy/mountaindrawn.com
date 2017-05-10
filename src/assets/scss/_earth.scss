@@ -149,24 +149,6 @@ body[data-mountain="earth"] {
 		}
 	}
 
-	// .earth-mtn {
-	// 	// show mountains
-	// 	display: block;
-	// 	visibility: visible;
-	// 	// style
-	// 	background-color: $earth-mountain;
-	// 	//background: linear-gradient(to right, rgba(116,70,144,1) 30%,rgba(230,221,236,1) 50%,rgba(116,70,144,1) 100%);
-	// 	cursor: pointer;
-	// 	position: absolute;
-	// 	transition: all 0.3s;
-	// 	width: 100%;
-	// 	height: 100%;
-	// 	z-index: 9;
-	// 	&.hover {
-	// 		background-color: darken($earth-mountain, 15%);
-	// 	}
-	// }
-
 	///*** STARFIELD ***///
 	// n is number of stars required
 	@function box-shadows($n) {
