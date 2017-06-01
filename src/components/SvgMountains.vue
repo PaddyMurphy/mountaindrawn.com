@@ -31,8 +31,16 @@
 
         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
             <polygon v-if="currentMountain === 0" id="earth-outline" filter="url(#earthShine)" fill="#CCE6F1" points="17.8025863 60.0757894 2.8334088 95.9172722 0.741210938 112.623692 10.2806369 164.704173 22.0597875 182.779748 48.5494647 209.860974 65.6242517 220.506497 73.0561523 223.449304 113.957471 235.847656 163.4824 232.924325 194.204371 222.403448 235.914213 191.666597 257.949348 154.136554 263.741211 121.370315 263.229657 103.292792 247.497939 60.2218586 233.571028 42.7753551 203.464071 19.4432373 189.238275 12.3637508 168.178349 4.98238798 125.104364 0.84765625 109.556575 1.56047387 78.08739 11.4990212 55.8146793 22.6002793 40.4642313 33.6820614"></polygon>
+
+            <path transform="translate(327.000000, 110.000000)" d="M27,225 C44,222 97,178 104,171 C111,164 161,147 174,154 C187,161 202,197 221,199 C240,201 224,176 245,168 C266,160 288,170 291,156 C294,142 314,145 321,127 C328,109 316,81 335,84 C354,87 369,76 365,52 C364.346975,48.0818471 352,1 342,5 C332,9 299,46 281,58 C263,70 246,84 226,80 C206,76 190,74 179,66 C168,58 146,30 142,30 C138,30 132,37 138,44 C144,51 161,60 166,62 C171,64 196,78 209,91 C222,104 211,116 201,124 C191,132 90,170 68,173 C46,176 14,195 6,206 C-2,217 10,228 27,225 Z" id="motion-path"></path>
+
             <!-- display intially and then let js change values -->
-            <polygon v-once v-for="n in svgCurrentMountain.rocks" :id="n.id" :fill="n.fill" :points="n.value"></polygon>
+            <polygon v-once
+              v-for="n in svgCurrentMountain.rocks"
+              :id="n.id"
+              :fill="n.fill"
+              :points="n.value">
+            </polygon>
 
             <g v-show="currentMountain === 0" class="svg-nav">
               <!-- NOTE: using router-link prevents display -->
@@ -43,7 +51,6 @@
                 @mouseover="hoverMtnShortcut">
                   <polygon :data-index="svg.index" class="earth-mtn" :class="svg.class" :fill="svg.fill" :points="svg.value"></polygon>
               </a>
-
             </g>
         </g>
     </svg>
@@ -200,6 +207,7 @@ export default {
     animateSvg: function () {
       const vm = this;
       let delay = 0;
+      let count = 0;
       let duration = 2500;
       let stagger = 33;
       let mountain = vm.svgCurrentMountain;
@@ -222,9 +230,39 @@ export default {
           points: d.value,
           targets: selector,
           complete: function (anim) {
-            // console.log(anim.completed);
+            // start climbers
+            count++;
+            console.log(count);
+            if (count === 30) {
+              vm.$once(vm.animateClimbers());
+            }
           }
         });
+      });
+    },
+    animateClimbers: function () {
+      let anime = Animejs;
+      const time = 10000;
+      // TODO: convert this to use #animatable
+      //       hide animatables at start
+      const animatables = this.$el.querySelectorAll('#shard-3, #shard-4, #shard-5');
+      const path = anime.path('#motion-path');
+
+      anime({
+        targets: animatables,
+        translateX: path('x'),
+        translateY: path('y'),
+        duration: function (el, i, l) {
+          return time + (i * 600);
+        },
+        // delay: function (el, i, l) {
+        //   return i * 100;
+        // },
+        loop: true,
+        easing: 'linear',
+        update: function (up) {
+          // console.log(up);
+        }
       });
     },
     sizeRocks: function () {
@@ -271,11 +309,17 @@ export default {
 }
 </script>
 
-<style scoped lang="css">
+<style scoped lang="scss">
   svg {
     overflow: visible;
     z-index: 1;
+
+    polygon {
+      transform-origin: 50% 50%;
+    }
   }
+
+  #motion-path {}
 
   .earth-mtn {
     animation: earth-mtn-out 0.2s ease-in forwards;

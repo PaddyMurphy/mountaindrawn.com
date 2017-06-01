@@ -15,6 +15,10 @@ export default new Router({
       path: '/:mountain',
       name: 'MountainUrl',
       component: Mountain
+    },
+    {
+      path: '*',
+      redirect: '/'
     }
   ]
 })
